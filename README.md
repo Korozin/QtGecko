@@ -4,20 +4,20 @@ QtGecko aims to be an open-sourced implementation of [JGecko U](github.com/bully
 This project is by no means finished, and is a _MAJOR_ work in progress.
 
 ## Requirements
-- lxml
-- PyQt5  
+- [lxml](https://pypi.org/project/lxml/)
+- [PyQt5](https://pypi.org/project/PyQt5/)
+- [configparser](https://pypi.org/project/configparser/)  
 
 All other dependencies should already be installed with the base Python package, but I'll list them anyway just in case they aren't.
-- re
-- os
-- sys
-- math
-- socket
-- struct
-- base64
-- traceback
-- webbrowser
-- configparser  
+- [re](https://docs.python.org/3/library/re.html)
+- [os](https://docs.python.org/3/library/os.html)
+- [sys](https://docs.python.org/3/library/sys.html)
+- [math](https://docs.python.org/3/library/math.html)
+- [socket](https://docs.python.org/3/library/socket.html)
+- [struct](https://docs.python.org/3/library/struct.html)
+- [base64](https://docs.python.org/3/library/base64.html)
+- [traceback](https://docs.python.org/3/library/traceback.html)
+- [webbrowser](https://docs.python.org/3/library/webbrowser.html)  
 
 All modules can be installed by using `pip install <module_name>`
 
@@ -37,4 +37,27 @@ python3 QtGecko.py
 - Code Tile searching (I.E: You can jump to a code's position in the GUI based on it's name)
 - Clean GUI Error handling
 - CLI Logging
+- GUI Themes
 - And I plan to add more!
+
+## Images
+
+#### Main Menu
+<img src="https://github.com/Korozin/QtGecko/blob/master/Assets/MainApp.png">  
+
+#### Code Editor
+<img src="https://github.com/Korozin/QtGecko/blob/master/Assets/CodeEditor.png" width="250px" height="240px">  
+
+#### Conversion Example
+<img src="https://github.com/Korozin/QtGecko/blob/master/Assets/Conversions.png" width="250px" height="240px">  
+
+#### Error Handling example
+<img src="https://github.com/Korozin/QtGecko/blob/master/Assets/ErrorHandling.png" width="250px" height="240px">  
+
+## License
+
+All released under the [MIT](https://github.com/Korozin/QtGecko/blob/master/LICENSE) License
+
+> **Warning**  
+This is a reproduction of JGeckoU  
+I in no way take credit for the original product.
