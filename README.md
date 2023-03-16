@@ -46,13 +46,13 @@ python3 QtGecko.py
 <img src="https://github.com/Korozin/QtGecko/blob/main/Assets/MainApp.png">  
 
 #### Code Editor
-<img src="https://github.com/Korozin/QtGecko/blob/main/Assets/CodeEditor.png" width="250px" height="240px">  
+<img src="https://github.com/Korozin/QtGecko/blob/main/Assets/CodeEditor.png">  
 
 #### Conversion Example
-<img src="https://github.com/Korozin/QtGecko/blob/main/Assets/Conversions.png" width="250px" height="240px">  
+<img src="https://github.com/Korozin/QtGecko/blob/main/Assets/Conversions.png">  
 
 #### Error Handling example
-<img src="https://github.com/Korozin/QtGecko/blob/main/Assets/ErrorHandling.png" width="250px" height="240px">  
+<img src="https://github.com/Korozin/QtGecko/blob/main/Assets/ErrorHandling.png">  
 
 ## License
 
