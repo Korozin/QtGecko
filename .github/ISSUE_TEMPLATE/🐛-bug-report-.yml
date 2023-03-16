@@ -1,0 +1,45 @@
+name: 🐛 Bug report
+description: Report errors or unexpected behavior
+labels: [🐛 bug]
+body:
+  - type: checkboxes
+    attributes:
+      label: 🔍 Have you checked Setup Guide to troubleshoot your issue?
+      description: Please also check the <a href="https://github.com/Korozin/QtGecko/discussions">discussions</a> page to see if your issue has already been addressed.
+      options:
+        - label: I have checked the Setup Guide
+          required: true
+  - type: checkboxes
+    attributes:
+      label: 🔍 Is there already an issue for your problem?
+      description: Please make sure you are not creating an already submitted <a href="https://github.com/Korozin/QtGecko/issues">Issue</a>. Check closed issues as well, because your issue may have already been fixed.
+      options:
+        - label: I have checked older issues, open and closed
+          required: true
+  - type: textarea
+    attributes:
+      label: ℹ Environment / Computer Info
+      description: Please provide the details of the system Spicetify is running on.
+      value: |
+        - QtGecko Version: 
+        - Operating System (OS):
+        - Game Running:
+      placeholder: |
+        - QtGecko Version: (EX: 2.3)
+        - Operating System (OS): Windows / Linux
+        - Game Running: Minecraft: Wii U Edition
+      render: Markdown
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 📝 Description
+      description: List steps to reproduce the error and details on what happens and what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 📸 Screenshots
+      description: Place any screenshots of the issue here if needed
+    validations:
+      required: false
