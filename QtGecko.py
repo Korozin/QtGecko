@@ -866,6 +866,11 @@ class QtGecko(QtWidgets.QMainWindow):
         self.apple_label.move(0, 120)
         self.apple_label.setText('<b>Pop-Apple</b> for making <a href="https://github.com/Pop-Apple/JGeckoU-Reproduction">this</a> as inspiration')
         self.apple_label.setOpenExternalLinks(True)
+        
+        self.nw_label = QtWidgets.QLabel(self.about_tab)
+        self.nw_label.move(0, 140)
+        self.nw_label.setText('<b>NWPlayer123</b> for making the Python <a href="https://github.com/wiiudev/pyGecko">TCPGecko</a> library')
+        self.nw_label.setOpenExternalLinks(True)
         #--- About Tab Items End ---#
         
     def CreateExtrnlToolsTab(self):
@@ -1639,7 +1644,7 @@ class QtGecko(QtWidgets.QMainWindow):
         
     def show_build_date(self):
         self.window = InfoWindow()
-        self.window.CreateWindow("Build Date", "Mar 16, 2023, 08:34:29", 280, 150)
+        self.window.CreateWindow("Build Date", "Mar 16, 2023, 08:41:16", 280, 150)
         self.window.show()
         
     def open_bug_tracker(self):
