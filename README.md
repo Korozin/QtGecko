@@ -3,6 +3,9 @@
 QtGecko aims to be an open-sourced implementation of [JGecko U](github.com/bullywiiplaza/JGeckoU/) in Python using the Qt5 Framework.  
 This project is by no means finished, and is a _MAJOR_ work in progress.
 
+> Original developer was [BullyWiiPlaza](https://github.com/BullyWiiPlaza)  
+> I do not take credit for his work, this is a re-creation.
+
 ## Requirements
 - [lxml](https://pypi.org/project/lxml/)
 - [PyQt5](https://pypi.org/project/PyQt5/)
