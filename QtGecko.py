@@ -925,19 +925,22 @@ class QtGecko(QtWidgets.QMainWindow):
             tcp_socket = TCPGecko(self.connection_bar.text())
             
             # Set proper GUI elements based on connectivity
-            self.send_codes_button.setEnabled(False)
+            self.send_codes_button.setEnabled(True)
             self.connect_button.setEnabled(False)
             self.disconnect_button.setEnabled(True)
             self.connection_bar.deselect()
-            self.send_codes_button.setEnabled(True)
             self.disable_codes_button.setEnabled(True)
+            
+            self.window = InfoWindow()
+            self.window.CreateWindow("Connection Success!", f"Connected successfully!.", 300, 150)
+            self.window.show()
         
         # GUI error handling for connection errors
         except Exception as e:
             self.window = ErrorWindow()
-            self.window.CreateWindow("Connection Error!", f"<b></b>Used IPv4: {self.connection_bar.text()}<br/>Error: {e}.<br/><br/>If you're unable to connect after troubleshooting, then submit an issue on <a href='https://github.com/Korozin/QtGecko/issues'>GitHub</a>.", 500, 200)
+            self.window.CreateWindow("Connection Error!", f"<b></b>Used IPv4: {self.connection_bar.text()}<br/>Error: {e}.<br/><br/>If you're unable to connect, then submit an issue on <a href='https://github.com/Korozin/QtGecko/issues'>GitHub</a>, or consult the <a href='https://github.com/Korozin/QtGecko/blob/main/SETUP-GUIDE.md'>Setup Guide</a>.", 500, 200)
             self.window.show()
-            print(f"\033[96m[TCPGecko]: \033[0mConnection attempt failed.. :(\033[0m")
+            print(f"\033[96m[TCPGeckof]: \033[0mConnection attempt failed.. :(\033[0m")
         
     # Function to determine Disconnect behavior
     def disconnect_press(self):
@@ -963,7 +966,7 @@ class QtGecko(QtWidgets.QMainWindow):
     # Function for Help button behavior
     def help_press(self):
         self.window = InfoWindow()
-        self.window.CreateWindow("Help", "If you can't connect, then make sure to follow the <a href='https://github.com/Korozin/QtGecko/issues'>setup guide</a>.<br/><br/>If you're still having issues then please submit an issue on <a href='https://github.com/Korozin/QtGecko/issues'>GitHub</a>.", 500, 200)
+        self.window.CreateWindow("Help", "If you can't connect, then make sure to follow the <a href='https://github.com/Korozin/QtGecko/blob/main/SETUP-GUIDE.md'>setup guide</a>.<br/><br/>If you're still having issues then please submit an issue on <a href='https://github.com/Korozin/QtGecko/issues'>GitHub</a>.", 500, 200)
         self.window.show()
         
     # function for auto-disconnection
@@ -1299,14 +1302,7 @@ class QtGecko(QtWidgets.QMainWindow):
                         if not line.startswith("#"):
                             tcp_socket.s.send(bytes.fromhex('03'))
                             tcp_socket.s.send(bytes.fromhex(line))
-        except Exception as e:
-            self.window = ErrorWindow()
-            self.window.CreateWindow("Error!", f"<b></b>Used IPv4: {self.connection_bar.text()}<br/>Error: {e}.", 500, 200)
-            self.window.show()
-                        
-        # Loop through checkboxes and send code if arw is disabled
         
-        try:
             pre_cafe_code = []
             cafe_code = ""
 
@@ -1327,11 +1323,15 @@ class QtGecko(QtWidgets.QMainWindow):
                 for x in range(math.floor(len(cafe_code)/8)):
                     tcp_socket.s.send(bytes.fromhex('03'))
                     tcp_socket.s.send(bytes.fromhex('0'+format(0x01133000+x*4,'X')+cafe_code[x*8:x*8+8]))
+                    print(cafe_code)
                 tcp_socket.s.send(bytes.fromhex('03'))
                 tcp_socket.s.send(bytes.fromhex('10014CFC00000001'))  
             else:
                 pass
                 
+            self.window = InfoWindow()
+            self.window.CreateWindow("Codes Sent!", f"Codes Sent Successfully!", 300, 150)
+            self.window.show()
         except Exception as e:
             self.window = ErrorWindow()
             self.window.CreateWindow("Error!", f"<b></b>Used IPv4: {self.connection_bar.text()}<br/>Error: {e}.", 500, 200)
@@ -1341,6 +1341,7 @@ class QtGecko(QtWidgets.QMainWindow):
     def disable_code(self):
         # Get the list of enabled checkboxes
         enabled_checkboxes = [checkbox for checkbox in self.checkboxes if checkbox.isChecked()]
+        count = 0
 
         # Loop through the checkboxes and disable code if arw is enabled
         try:
@@ -1354,15 +1355,11 @@ class QtGecko(QtWidgets.QMainWindow):
                             code = line.replace("#", "")
                             tcp_socket.s.send(bytes.fromhex('03'))
                             tcp_socket.s.send(bytes.fromhex(code))
+                            count += 1
                         else:
                             pass
-        except Exception as e:
-            self.window = ErrorWindow()
-            self.window.CreateWindow("Error!", f"<b></b>Used IPv4: {self.connection_bar.text()}<br/>Error: {e}.", 500, 200)
-            self.window.show()
                         
-        # Loop through checkboxes and disable code if arw is disabled
-        try:
+            # Loop through checkboxes and disable code if arw is disabled
             pre_cafe_code = []
 
             for checkbox in enabled_checkboxes:
@@ -1373,6 +1370,7 @@ class QtGecko(QtWidgets.QMainWindow):
                     for line in code.split("\n"):
                         if line.startswith("#"):
                             pre_cafe_code.append(line)
+                            count += 1
 
             if not pre_cafe_code == []:
                 cafe_code = ''.join(pre_cafe_code).replace(' ', '')
@@ -1390,6 +1388,9 @@ class QtGecko(QtWidgets.QMainWindow):
             else:
                 pass
 
+            self.window = InfoWindow()
+            self.window.CreateWindow("Codes Sent!", f"Codes Disabled Successfully!<br/><br/>{count} undo-lines executed", 350, 150)
+            self.window.show()
         except Exception as e:
             self.window = ErrorWindow()
             self.window.CreateWindow("Error!", f"<b></b>Used IPv4: {self.connection_bar.text()}<br/>Error: {e}.", 500, 200)
@@ -1638,7 +1639,7 @@ class QtGecko(QtWidgets.QMainWindow):
         
     def show_build_date(self):
         self.window = InfoWindow()
-        self.window.CreateWindow("Build Date", "Mar 15, 2023, 21:34:04", 280, 150)
+        self.window.CreateWindow("Build Date", "Mar 16, 2023, 08:34:29", 280, 150)
         self.window.show()
         
     def open_bug_tracker(self):
