@@ -8,32 +8,29 @@ assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## Bug Report Template
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+🔍 Have you checked [Setup Guide](https://github.com/Korozin/QtGecko/blob/main/SETUP-GUIDE.md) to troubleshoot your issue?
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+- [ ] I have checked the Setup Guide (Required)
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+🔍 Is there already an issue for your problem?
+<smaller>Please make sure you are not creating an already submitted [Issue](https://github.com/Korozin/QtGecko/issues). Check closed issues as well, because your issue may have already been fixed.</smaller>
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+- [ ] I have checked older issues, open and closed (Required)
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+### ℹ Environment / Computer Info
 
-**Additional context**
-Add any other context about the problem here.
+<smaller>Please provide the details of the system QtGecko is running on.</smaller>
+
+- QtGecko Version: 
+- Operating System:
+- Running Game:
+
+### 📝 Description
+
+<smaller>List steps to reproduce the error and details on what happens and what you expected to happen.</smaller>
+
+### 📸 Screenshots (Optional)
+
+<smaller>Place any screenshots of the issue here if needed</smaller>
