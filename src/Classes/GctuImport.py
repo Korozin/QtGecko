@@ -13,6 +13,8 @@ class ImportGCTUWindow(QtWidgets.QWidget):
         row1_layout = QtWidgets.QHBoxLayout()
         row2_layout = QtWidgets.QHBoxLayout()
         
+        self.center_screen()
+        
         file_name_label = QtWidgets.QLabel("File Name:")
         self.file_name_line_edit = QtWidgets.QLineEdit()
         self.file_name_line_edit.textChanged.connect(self.check_validity)
@@ -30,6 +32,12 @@ class ImportGCTUWindow(QtWidgets.QWidget):
         main_layout.addLayout(row2_layout)
         
         self.check_validity("")
+        
+    def center_screen(self):
+        frame_geometry = self.frameGeometry()
+        calculate_screen = QtWidgets.QDesktopWidget().availableGeometry().center()
+        frame_geometry.moveCenter(calculate_screen)
+        self.move(frame_geometry.topLeft())
         
     def on_confirm(self):
     
@@ -107,8 +115,7 @@ class ImportGCTUWindow(QtWidgets.QWidget):
         # Sets the XML File Path if successfully selected, if not leave path empty
         if dialog.exec_():
             file_name = dialog.selectedFiles()[0]
-            
-        self.file_name_line_edit.setText(file_name)
+            self.file_name_line_edit.setText(file_name)
         
     def check_file_exists(self, filepath):
         return os.path.exists(filepath)
