@@ -56,7 +56,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
         self.Connection_Bar.setText(self.config_manager.last_used_ipv4)
         self.Connect_Button.clicked.connect(self.connect)
         self.Disconnect_Button.clicked.connect(self.disconnect)
-        self.Help_Button.clicked.connect(self.send_ram_writes)
+        self.Help_Button.clicked.connect(self.help)
 
         # Code(s) tab  #
         self.AddCode_Button.clicked.connect(self.open_code_creator)
