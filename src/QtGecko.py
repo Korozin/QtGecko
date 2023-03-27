@@ -34,7 +34,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
         
         if not os.path.exists(self.file_path):
             os.makedirs("codes", exist_ok=True)
-            with open("codes/null.xml", "w") as f:
+            with open(self.file_path, "w") as f:
                 f.write('<codes>\n</codes>')
             print("[QtGecko]: Template XML created")
 
@@ -46,6 +46,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
         
         # Set up GUI
         self.setupUi(self)
+        self.center_screen()
         self.populate_codes_area()
         
         '''Connect function slots to graphical interface(s)'''
@@ -55,7 +56,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
         self.Connection_Bar.setText(self.config_manager.last_used_ipv4)
         self.Connect_Button.clicked.connect(self.connect)
         self.Disconnect_Button.clicked.connect(self.disconnect)
-        self.Help_Button.clicked.connect(self.help)
+        self.Help_Button.clicked.connect(self.send_ram_writes)
 
         # Code(s) tab  #
         self.AddCode_Button.clicked.connect(self.open_code_creator)
@@ -93,6 +94,12 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
         self.TCPGeckoInstaller_Button.clicked.connect(self.download_tcp_gecko)
         
     ### MainWindow functions start ###
+    def center_screen(self):
+        frame_geometry = self.frameGeometry()
+        calculate_screen = QtWidgets.QDesktopWidget().availableGeometry().center()
+        frame_geometry.moveCenter(calculate_screen)
+        self.move(frame_geometry.topLeft())
+        
     def set_IPv4_validity(self):
         # Set QtWidgets.QLineEdit style based on IPv4 Validity
         if IP_Verification(self.Connection_Bar.text()):
@@ -276,13 +283,9 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
 
     def send_ram_writes(self):
         checked_checkboxes = self.get_checked_checkboxes(self.Checkbox_ScrollArea)
-        selected_codes = []
-        for checkbox in checked_checkboxes:
-            codes = read_ram_writes_only(self.file_path, checkbox)
-            code_str = "\n".join(codes)
-            selected_codes.append(code_str)
-        code_str = "\n".join(selected_codes)
-        code_str = remove_extra_lines(code_str)
+        codes = [read_ram_writes_only(self.file_path, checkbox) 
+                for checkbox in checked_checkboxes]
+        code_str = remove_extra_lines('\n'.join('\n'.join(c for c in code) for code in codes))
 
         for line in code_str.split("\n"):
             if "#" not in line:
@@ -290,36 +293,25 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
                 addr = int(addr, 16)
                 value = int(value, 16)
                 self.tcp_con.kernelWrite(addr, value)
-                #print(addr, value)
 
     def send_cafe_codes(self):
         checked_checkboxes = self.get_checked_checkboxes(self.Checkbox_ScrollArea)
-        selected_codes = []
-        cafe_code = []
-        for checkbox in checked_checkboxes:
-            codes = read_cafe_codes_only(self.file_path, checkbox)
-            code_str = "\n".join(codes)
-            selected_codes.append(code_str)
-        code_str = "\n".join(selected_codes)
-        code_str = remove_extra_lines(code_str)
-
-        for line in code_str.split("\n"):
-            if "#" not in line:
-                cafe_code.append(line)
-
-        cafe_code = ''.join(s.replace(' ', '') for s in cafe_code)
-        self.tcp_con.__socket.send(bytes.fromhex('03'))
+        selected_codes = ['\n'.join(read_cafe_codes_only(self.file_path, checkbox)) for checkbox in checked_checkboxes]
+        cafe_code = [line.replace(' ', '') for line in ''.join(selected_codes).split('\n') if '#' not in line]
+        cafe_code = ''.join(cafe_code)
+    
+        hex_bytes = [bytes.fromhex(hexstr) for hexstr in ['03', '03']]
         for x in range(self.restore):
-            self.tcp_con.__socket.send(bytes.fromhex('03'))
-            self.tcp_con.__socket.send(bytes.fromhex('0'+format(0x1133000+x*4,'X')+'00000000'))
-            #print(bytes.fromhex('0'+format(0x1133000+x*4,'X')+'00000000'))
-        for x in range(math.floor(len(cafe_code)/8)):
-            self.tcp_con.__socket.send(bytes.fromhex('03'))
-            self.tcp_con.__socket.send(bytes.fromhex('0'+format(0x1133000+x*4,'X')+cafe_code[x*8:x*8+8]))
-            #print(bytes.fromhex('0'+format(0x1133000+x*4,'X')+cafe_code[x*8:x*8+8]))
-        self.tcp_con.__socket.send(bytes.fromhex('03'))
-        self.tcp_con.__socket.send(bytes.fromhex('10014CFC00000001'))
-        self.restore = x
+            hex_bytes += [bytes.fromhex(f'0{0x1133000+x*4:X}00000000')] * 2
+    
+        for i, chunk in enumerate([cafe_code[x*8:x*8+8] for x in range(math.floor(len(cafe_code)/8))]):
+            hex_bytes += [bytes.fromhex(f'0{0x1133000+i*4:X}{chunk}'), bytes.fromhex('03')]
+    
+        hex_bytes += [bytes.fromhex('10014CFC00000001')]
+        self.restore = i
+    
+        for hex_bytes_item in hex_bytes:
+            self.tcp_con.__socket.send(hex_bytes_item)
 
     def send_all_codes(self):
         self.send_ram_writes()
@@ -327,13 +319,9 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
 
     def disable_ram_writes(self):
         checked_checkboxes = self.get_checked_checkboxes(self.Checkbox_ScrollArea)
-        selected_codes = []
-        for checkbox in checked_checkboxes:
-            codes = read_ram_writes_only(self.file_path, checkbox)
-            code_str = "\n".join(codes)
-            selected_codes.append(code_str)
-        code_str = "\n".join(selected_codes)
-        code_str = remove_extra_lines(code_str)
+        codes = [read_ram_writes_only(self.file_path, checkbox) 
+                for checkbox in checked_checkboxes]
+        code_str = remove_extra_lines('\n'.join('\n'.join(c for c in code) for code in codes))
 
         for line in code_str.split("\n"):
             if "#" in line:
@@ -342,17 +330,12 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
                 addr = int(addr, 16)
                 value = int(value, 16)
                 self.tcp_con.kernelWrite(addr, value)
-                #print(addr, value)
 
     def disable_cafe_codes(self):
         checked_checkboxes = self.get_checked_checkboxes(self.Checkbox_ScrollArea)
-        selected_codes = []
-        for checkbox in checked_checkboxes:
-            codes = read_cafe_codes_only(self.file_path, checkbox)
-            code_str = "\n".join(codes)
-            selected_codes.append(code_str)
-        code_str = "\n".join(selected_codes)
-        code_str = remove_extra_lines(code_str)
+        codes = [read_cafe_codes_only(self.file_path, checkbox) 
+                for checkbox in checked_checkboxes]
+        code_str = remove_extra_lines('\n'.join('\n'.join(c for c in code) for code in codes))
 
         for line in code_str.split("\n"):
             if "#" in line:
@@ -361,13 +344,11 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
                 addr = int(addr, 16)
                 value = int(value, 16)
                 self.tcp_con.kernelWrite(addr, value)
-                #print(addr, value)
 
         self.tcp_con.__socket.send(bytes.fromhex('03'))
         for x in range(self.restore):
             self.tcp_con.__socket.send(bytes.fromhex('03'))
             self.tcp_con.__socket.send(bytes.fromhex('0'+format(0x1133000+x*4,'X')+'00000000'))
-            #print(bytes.fromhex('0'+format(0x1133000+x*4,'X')+'00000000'))
         self.tcp_con.__socket.send(bytes.fromhex('03'))
         self.tcp_con.__socket.send(bytes.fromhex('10014CFC00000001'))
 
@@ -380,7 +361,6 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
         dialog = QtWidgets.QFileDialog(self)
         dialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
         dialog.setOption(QtWidgets.QFileDialog.DontUseNativeDialog, False)
-        dialog.setDirectory("codes")
 
         # Add filters for XML and All files
         filters = ["XML Files (*.xml)", "All Files (*.*)"]
@@ -391,7 +371,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
         if dialog.exec_():
             self.file_path = dialog.selectedFiles()[0]
         else:
-            self.file_path = "null.xml"
+            self.file_path = "./codes/null.xml"
             
         self.refresh_gui()
         
@@ -492,7 +472,7 @@ def set_icon(QApp):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     set_icon(app)
-    window = Main("codes/null.xml")
+    window = Main("./codes/null.xml")
     app.setStyle(window.set_theme)
     window.show()
     sys.exit(app.exec_())
