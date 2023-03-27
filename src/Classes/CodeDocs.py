@@ -1209,6 +1209,7 @@ class HTMLViewer(QtWidgets.QWidget):
 
         # set the text browser content to the loaded HTML
         browser.setHtml(html_content)
+        self.center_screen()
         
         button = QtWidgets.QPushButton("Close Window")
         button.clicked.connect(self.close)
@@ -1220,3 +1221,9 @@ class HTMLViewer(QtWidgets.QWidget):
         self.setLayout(vbox)
         self.setWindowTitle('HTML Viewer')
         self.setGeometry(100, 100, 800, 600)
+        
+    def center_screen(self):
+        frame_geometry = self.frameGeometry()
+        calculate_screen = QtWidgets.QDesktopWidget().availableGeometry().center()
+        frame_geometry.moveCenter(calculate_screen)
+        self.move(frame_geometry.topLeft())
