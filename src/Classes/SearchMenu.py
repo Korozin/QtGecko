@@ -14,6 +14,7 @@ class SearchMenu(QtWidgets.QWidget):
         # Add layout for search results
         results_layout = QtWidgets.QVBoxLayout()
         self.setLayout(results_layout)
+        self.center_screen()
 
         # Create QLineEdit for filtering results
         filter_edit = QtWidgets.QLineEdit(self)
@@ -39,6 +40,12 @@ class SearchMenu(QtWidgets.QWidget):
 
         # Connect QLineEdit's textEdited signal to filter_results function
         filter_edit.textEdited.connect(lambda text: self.filter_results(text, buttons))
+
+    def center_screen(self):
+        frame_geometry = self.frameGeometry()
+        calculate_screen = QtWidgets.QDesktopWidget().availableGeometry().center()
+        frame_geometry.moveCenter(calculate_screen)
+        self.move(frame_geometry.topLeft())
 
     def check_box(self, checkbox):
         checkbox.setChecked(True)
