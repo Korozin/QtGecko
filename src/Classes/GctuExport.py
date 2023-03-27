@@ -8,6 +8,7 @@ class ExportGCTUWindow(QtWidgets.QWidget):
         self.input_string = input_string
         self.setWindowTitle('Export GCTU')
         self.setFixedSize(600, 100)
+        self.center_screen()
         
         main_layout = QtWidgets.QVBoxLayout(self)
         row1_layout = QtWidgets.QHBoxLayout()
@@ -32,6 +33,12 @@ class ExportGCTUWindow(QtWidgets.QWidget):
         main_layout.addLayout(row1_layout)
         main_layout.addLayout(row2_layout)
         self.gctu_update()
+        
+    def center_screen(self):
+        frame_geometry = self.frameGeometry()
+        calculate_screen = QtWidgets.QDesktopWidget().availableGeometry().center()
+        frame_geometry.moveCenter(calculate_screen)
+        self.move(frame_geometry.topLeft())
         
     def gctu_update(self):
     
