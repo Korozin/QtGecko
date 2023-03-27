@@ -4,13 +4,15 @@ class LineNumberArea(QtWidgets.QWidget):
     def __init__(self, editor):
         super().__init__(editor)
         self.editor = editor
+        self.setAutoFillBackground(True)
 
     def sizeHint(self):
-        return QSize(self.editor.lineNumberAreaWidth(), 0)
+        return QtCore.QSize(self.editor.lineNumberAreaWidth(), 0)
 
     def paintEvent(self, event):
+        palette = QtWidgets.QApplication.palette()  # use the application's palette instead of the editor's palette
         painter = QtGui.QPainter(self)
-        color = QtGui.QColor("#EAEAEA")
+        color = palette.color(QtGui.QPalette.Window)
         painter.fillRect(event.rect(), color)
 
         fontMetrics = painter.fontMetrics()
