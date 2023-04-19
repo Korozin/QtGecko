@@ -79,6 +79,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
         self.BugTracker_Button.clicked.connect(self.open_bug_tracker)
         self.DataTypeConversion_Button.clicked.connect(self.open_datatype_conversion)
         self.ConnectionTimeout_Checkbox.stateChanged.connect(self.connection_timeout_changed)
+        
         '''Configure Theme ComboBox'''
         self.SetTheme_ComboBox.addItems(QtWidgets.QStyleFactory.keys())
         self.SetTheme_ComboBox.setCurrentText(self.config_manager.theme_option)
@@ -159,7 +160,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
             self.Connection_Bar.deselect()
         except Exception as e:
             self.window = ErrorWindow()
-            self.window.CreateWindow("Error!", f"<b></b>Used IPv4: {self.connection_bar.text()}<br/>Error: {e}.", 500, 200)
+            self.window.CreateWindow("Error!", f"<b></b>Used IPv4: {self.Connection_Bar.text()}<br/>Error: {e}.", 500, 200)
             self.window.show()
 
     def help(self):
@@ -287,35 +288,47 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
                 for checkbox in checked_checkboxes]
         code_str = remove_extra_lines('\n'.join('\n'.join(c for c in code) for code in codes))
 
-        for line in code_str.split("\n"):
-            if "#" not in line:
-                addr, value = line.split()
-                addr = int(addr, 16)
-                value = int(value, 16)
-                self.tcp_con.kernelWrite(addr, value)
+        if codes == [[]] or codes == []:
+            pass
+        else:
+            for line in code_str.split("\n"):
+                if "#" not in line:
+                    addr, value = line.split()
+                    addr = int(addr, 16)
+                    value = int(value, 16)
+                    self.tcp_con.kernelWrite(addr, value)
 
     def send_cafe_codes(self):
         checked_checkboxes = self.get_checked_checkboxes(self.Checkbox_ScrollArea)
         selected_codes = ['\n'.join(read_cafe_codes_only(self.file_path, checkbox)) for checkbox in checked_checkboxes]
-        cafe_code = [line.replace(' ', '') for line in ''.join(selected_codes).split('\n') if '#' not in line]
-        cafe_code = ''.join(cafe_code)
+        
+        if selected_codes == [''] or selected_codes == []:
+            pass
+        else:
+            cafe_code = [line.replace(' ', '') for line in ''.join(selected_codes).split('\n') if '#' not in line]
+            cafe_code = ''.join(cafe_code)
     
-        hex_bytes = [bytes.fromhex(hexstr) for hexstr in ['03', '03']]
-        for x in range(self.restore):
-            hex_bytes += [bytes.fromhex(f'0{0x1133000+x*4:X}00000000')] * 2
+            hex_bytes = [bytes.fromhex(hexstr) for hexstr in ['03', '03']]
+            for x in range(self.restore):
+                hex_bytes += [bytes.fromhex(f'0{0x1133000+x*4:X}00000000')] * 2
     
-        for i, chunk in enumerate([cafe_code[x*8:x*8+8] for x in range(math.floor(len(cafe_code)/8))]):
-            hex_bytes += [bytes.fromhex(f'0{0x1133000+i*4:X}{chunk}'), bytes.fromhex('03')]
+            for i, chunk in enumerate([cafe_code[x*8:x*8+8] for x in range(math.floor(len(cafe_code)/8))]):
+                hex_bytes += [bytes.fromhex(f'0{0x1133000+i*4:X}{chunk}'), bytes.fromhex('03')]
     
-        hex_bytes += [bytes.fromhex('10014CFC00000001')]
-        self.restore = i
+            hex_bytes += [bytes.fromhex('10014CFC00000001')]
+            self.restore = i
     
-        for hex_bytes_item in hex_bytes:
-            self.tcp_con.__socket.send(hex_bytes_item)
+            for hex_bytes_item in hex_bytes:
+                self.tcp_con.__socket.send(hex_bytes_item)
 
     def send_all_codes(self):
-        self.send_ram_writes()
-        self.send_cafe_codes()
+        try:
+            self.send_ram_writes()
+            self.send_cafe_codes()
+        except Exception as e:
+            self.window = ErrorWindow()
+            self.window.CreateWindow("Code Error!", f"<b></b>Used IPv4: {self.Connection_Bar.text()}<br/>Error: {e}.", 500, 200)
+            self.window.show()
 
     def disable_ram_writes(self):
         checked_checkboxes = self.get_checked_checkboxes(self.Checkbox_ScrollArea)
@@ -323,13 +336,16 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
                 for checkbox in checked_checkboxes]
         code_str = remove_extra_lines('\n'.join('\n'.join(c for c in code) for code in codes))
 
-        for line in code_str.split("\n"):
-            if "#" in line:
-                line = line.replace("#", "")
-                addr, value = line.split()
-                addr = int(addr, 16)
-                value = int(value, 16)
-                self.tcp_con.kernelWrite(addr, value)
+        if codes == [[]] or codes == []:
+            pass
+        else:
+            for line in code_str.split("\n"):
+                if "#" in line:
+                    line = line.replace("#", "")
+                    addr, value = line.split()
+                    addr = int(addr, 16)
+                    value = int(value, 16)
+                    self.tcp_con.kernelWrite(addr, value)
 
     def disable_cafe_codes(self):
         checked_checkboxes = self.get_checked_checkboxes(self.Checkbox_ScrollArea)
@@ -337,24 +353,32 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
                 for checkbox in checked_checkboxes]
         code_str = remove_extra_lines('\n'.join('\n'.join(c for c in code) for code in codes))
 
-        for line in code_str.split("\n"):
-            if "#" in line:
-                line = line.replace("#", "")
-                addr, value = line.split()
-                addr = int(addr, 16)
-                value = int(value, 16)
-                self.tcp_con.kernelWrite(addr, value)
+        if codes == [''] or codes == []:
+            pass
+        else:
+            for line in code_str.split("\n"):
+                if "#" in line:
+                    line = line.replace("#", "")
+                    addr, value = line.split()
+                    addr = int(addr, 16)
+                    value = int(value, 16)
+                    self.tcp_con.kernelWrite(addr, value)
 
-        self.tcp_con.__socket.send(bytes.fromhex('03'))
-        for x in range(self.restore):
             self.tcp_con.__socket.send(bytes.fromhex('03'))
-            self.tcp_con.__socket.send(bytes.fromhex('0'+format(0x1133000+x*4,'X')+'00000000'))
-        self.tcp_con.__socket.send(bytes.fromhex('03'))
-        self.tcp_con.__socket.send(bytes.fromhex('10014CFC00000001'))
+            for x in range(self.restore):
+                self.tcp_con.__socket.send(bytes.fromhex('03'))
+                self.tcp_con.__socket.send(bytes.fromhex('0'+format(0x1133000+x*4,'X')+'00000000'))
+            self.tcp_con.__socket.send(bytes.fromhex('03'))
+            self.tcp_con.__socket.send(bytes.fromhex('10014CFC00000001'))
 
     def disable_all_codes(self):
-        self.disable_ram_writes()
-        self.disable_cafe_codes()
+        try:
+            self.disable_ram_writes()
+            self.disable_cafe_codes()
+        except Exception as e:
+            self.window = ErrorWindow()
+            self.window.CreateWindow("Code Error!", f"<b></b>Used IPv4: {self.Connection_Bar.text()}<br/>Error: {e}.", 500, 200)
+            self.window.show()
                 
     def load_code_list(self):
         # Create a dialog to allow the user to select their file
@@ -432,7 +456,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
         self.InfoWindow.show()
 
     def show_build_date(self):
-        self.InfoWindow.CreateWindow("Build Date", "Mar 24, 2023, 09:56:52", 280, 150)
+        self.InfoWindow.CreateWindow("Build Date", "April 19, 2023, 02:44:35 PM", 280, 150)
         self.InfoWindow.show()
 
     def open_bug_tracker(self):
