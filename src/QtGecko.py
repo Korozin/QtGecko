@@ -1,46 +1,37 @@
-import os, sys, math, base64, socket, webbrowser
-from PyQt5 import QtWidgets, QtCore, QtGui
-from functools import partial
+# -------------------------------------------------------- #
+import os, sys, math, \
+       base64, socket, PyQt5, \
+       functools, webbrowser
 
-# -------------------------------------- #
-from Classes.uGecko import uGecko
-from Classes.MainWindow import QtGecko_GUI
-from Classes.ReadXML import read_names, see_enabled_codes, read_codes, read_ram_writes_only, read_cafe_codes_only, remove_extra_lines, read_code_comments, read_code_authors
-from Classes.Verification import IP_Verification
-from Classes.ConfigManager import ConfigManager
-from Classes.ErrorWindow import ErrorWindow
-from Classes.InfoWindow import InfoWindow
-from Classes.CodeDocs import html_content, HTMLViewer
-from Classes.SearchMenu import SearchMenu
-from Classes.CodeCreator import CodeCreator
-from Classes.GctuExport import ExportGCTUWindow
-from Classes.GctuImport import ImportGCTUWindow
-from Classes.DatatypeConversion import DatatypeConversion
-from Classes.GeckoIcon import GeckoIcon
-# -------------------------------------- #
+from Classes import uGecko, MainWindow, ReadXML, \
+                    Verification, ConfigManager, ErrorWindow, \
+                    InfoWindow, CodeDocs, SearchMenu, \
+                    CodeCreator, GctuExport, GctuImport, \
+                    DatatypeConversion, GeckoIcon
+# ------------------------------------------------------- #
 
 
-class Main(QtWidgets.QMainWindow, QtGecko_GUI):
+class Main(PyQt5.QtWidgets.QMainWindow, MainWindow.QtGecko_GUI):
     def __init__(self, file_path):
         super(Main, self).__init__()
         
         # Set needed vars
         self.restore = 0
         self.file_path = file_path
-        self.connection_timeout_timer = QtCore.QTimer()
-        self.InfoWindow = InfoWindow()
-        self.ErrorWindow = ErrorWindow()
-        self.DatatypeConversion = DatatypeConversion()
+        self.connection_timeout_timer = PyQt5.QtCore.QTimer()
+        self.InfoWindow = InfoWindow.InfoWindow()
+        self.ErrorWindow = ErrorWindow.ErrorWindow()
+        self.DatatypeConversion = DatatypeConversion.DatatypeConversion()
         
         if not os.path.exists(self.file_path):
-            os.makedirs("codes", exist_ok=True)
+            os.makedirs("./codes", exist_ok=True)
             with open(self.file_path, "w") as f:
                 f.write('<codes>\n</codes>')
             print("[QtGecko]: Template XML created")
 
         # Config operations
         self.config_path = "config.ini"
-        self.config_manager = ConfigManager(self.config_path)
+        self.config_manager = ConfigManager.ConfigManager(self.config_path)
         self.config_manager.print_config_values()
         self.set_theme = self.config_manager.theme_option
         
@@ -81,7 +72,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
         self.ConnectionTimeout_Checkbox.stateChanged.connect(self.connection_timeout_changed)
         
         '''Configure Theme ComboBox'''
-        self.SetTheme_ComboBox.addItems(QtWidgets.QStyleFactory.keys())
+        self.SetTheme_ComboBox.addItems(PyQt5.QtWidgets.QStyleFactory.keys())
         self.SetTheme_ComboBox.setCurrentText(self.config_manager.theme_option)
         self.SetTheme_ComboBox.currentIndexChanged.connect(self.change_theme)
         
@@ -97,13 +88,13 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
     ### MainWindow functions start ###
     def center_screen(self):
         frame_geometry = self.frameGeometry()
-        calculate_screen = QtWidgets.QDesktopWidget().availableGeometry().center()
+        calculate_screen = PyQt5.QtWidgets.QDesktopWidget().availableGeometry().center()
         frame_geometry.moveCenter(calculate_screen)
         self.move(frame_geometry.topLeft())
         
     def set_IPv4_validity(self):
-        # Set QtWidgets.QLineEdit style based on IPv4 Validity
-        if IP_Verification(self.Connection_Bar.text()):
+        # Set PyQt5.QtWidgets.QLineEdit style based on IPv4 Validity
+        if Verification.IP_Verification(self.Connection_Bar.text()):
             self.Connection_Bar.setStyleSheet("background-color: #00FF00;")
             self.Connect_Button.setEnabled(True)
         else:
@@ -116,7 +107,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
 
         try:
             #self.tcp_con = TCPGecko(self.Connection_Bar.text())
-            self.tcp_con = uGecko(self.Connection_Bar.text())
+            self.tcp_con = uGecko.uGecko(self.Connection_Bar.text())
             self.tcp_con.connect()
             
             # Determine whether or not to call the timeout function based on checkbox status
@@ -159,8 +150,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
             self.Connect_Button.setEnabled(True)
             self.Connection_Bar.deselect()
         except Exception as e:
-            self.window = ErrorWindow()
-            self.window.CreateWindow("Error!", f"<b></b>Used IPv4: {self.Connection_Bar.text()}<br/>Error: {e}.", 500, 200)
+            self.ErrorWindow.CreateWindow("Error!", f"<b></b>Used IPv4: {self.Connection_Bar.text()}<br/>Error: {e}.", 500, 200)
             self.window.show()
 
     def help(self):
@@ -170,20 +160,20 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
     
     ### Codes Tab functions start ###
     def open_code_creator(self):
-        self.Code_Creator_Window = CodeCreator(self.file_path)
+        self.Code_Creator_Window = CodeCreator.CodeCreator(self.file_path)
         self.Code_Creator_Window.show()
         self.Code_Creator_Window.code_creator_ok_button.clicked.connect(self.refresh_gui)
         
     def populate_codes_area(self):
         # Read the names from the XML file and create a checkbox for each entry
-        names = read_names(self.file_path)
-        enabled_list = see_enabled_codes(self.file_path)
-        self.checkbox_widget = QtWidgets.QWidget(self.Checkbox_ScrollArea)
-        self.checkbox_layout = QtWidgets.QVBoxLayout(self.checkbox_widget)
+        names = ReadXML.read_names(self.file_path)
+        enabled_list = ReadXML.see_enabled_codes(self.file_path)
+        self.checkbox_widget = PyQt5.QtWidgets.QWidget(self.Checkbox_ScrollArea)
+        self.checkbox_layout = PyQt5.QtWidgets.QVBoxLayout(self.checkbox_widget)
         self.Checkbox_ScrollArea.setWidget(self.checkbox_widget)
         self.checkboxes = []
         for name, enabled in zip(names, enabled_list):
-            self.checkbox = QtWidgets.QCheckBox(f"{name}", self)
+            self.checkbox = PyQt5.QtWidgets.QCheckBox(f"{name}", self)
             if enabled == "true":
                 enabled = True
             else:
@@ -196,7 +186,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
         
         # Connect the checkboxes to the function to update the text edit
         for i, self.checkbox in enumerate(self.checkboxes):
-            self.checkbox.stateChanged.connect(partial(self.update_code_text_fields, i))
+            self.checkbox.stateChanged.connect(functools.partial(self.update_code_text_fields, i))
             
             if self.checkbox.isChecked():
                 self.update_code_text_fields(i)
@@ -204,11 +194,11 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
     def refresh_gui(self):
         for checkbox in self.checkboxes:
             checkbox.deleteLater()
-        names = read_names(self.file_path)
-        enabled_list = see_enabled_codes(self.file_path)
+        names = ReadXML.read_names(self.file_path)
+        enabled_list = ReadXML.see_enabled_codes(self.file_path)
         self.checkboxes = []
         for name, enabled in zip(names, enabled_list):
-            self.checkbox = QtWidgets.QCheckBox(f"{name}", self)
+            self.checkbox = PyQt5.QtWidgets.QCheckBox(f"{name}", self)
             if enabled == "true":
                 enabled = True
             else:
@@ -221,7 +211,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
             
         # Connect the checkboxes to the function to update the text edit
         for i, self.checkbox in enumerate(self.checkboxes):
-            self.checkbox.stateChanged.connect(partial(self.update_code_text_fields, i))
+            self.checkbox.stateChanged.connect(functools.partial(self.update_code_text_fields, i))
             
             if self.checkbox.isChecked():
                 self.update_code_text_fields(i)
@@ -230,10 +220,10 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
     def update_code_text_fields(self, index):
         try:
             name = self.checkboxes[index].text()
-            codes = read_codes(self.file_path, name)
-            comments = read_code_comments(self.file_path, name)
-            authors = read_code_authors(self.file_path, name)
-            arw = read_ram_writes_only(self.file_path, name)
+            codes = ReadXML.read_codes(self.file_path, name)
+            comments = ReadXML.read_code_comments(self.file_path, name)
+            authors = ReadXML.read_code_authors(self.file_path, name)
+            arw = ReadXML.read_ram_writes_only(self.file_path, name)
 
             if codes:
                 code_str = "\n".join(codes)
@@ -246,7 +236,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
             checked_checkboxes = self.get_checked_checkboxes(self.Checkbox_ScrollArea)
             selected_codes = []
             for checkbox in checked_checkboxes:
-                codes = read_codes(self.file_path, checkbox)
+                codes = ReadXML.read_codes(self.file_path, checkbox)
                 code_str = "\n".join(codes)
                 selected_codes.append(code_str)
             code_str = "\n".join(selected_codes)
@@ -272,8 +262,8 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
             checkbox.setChecked(False)
             
     def export_code_list(self):
-        options = QtWidgets.QFileDialog.Options()
-        file_name, _ = QtWidgets.QFileDialog.getSaveFileName(self, "Save File", "", "XML Files (*.xml)", options=options)
+        options = PyQt5.QtWidgets.QFileDialog.Options()
+        file_name, _ = PyQt5.QtWidgets.QFileDialog.getSaveFileName(self, "Save File", "", "XML Files (*.xml)", options=options)
         
         if file_name:
             with open(self.file_path, 'r') as f:
@@ -284,9 +274,9 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
 
     def send_ram_writes(self):
         checked_checkboxes = self.get_checked_checkboxes(self.Checkbox_ScrollArea)
-        codes = [read_ram_writes_only(self.file_path, checkbox) 
+        codes = [ReadXML.read_ram_writes_only(self.file_path, checkbox) 
                 for checkbox in checked_checkboxes]
-        code_str = remove_extra_lines('\n'.join('\n'.join(c for c in code) for code in codes))
+        code_str = ReadXML.remove_extra_lines('\n'.join('\n'.join(c for c in code) for code in codes))
 
         if codes == [[]] or codes == []:
             pass
@@ -300,7 +290,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
 
     def send_cafe_codes(self):
         checked_checkboxes = self.get_checked_checkboxes(self.Checkbox_ScrollArea)
-        selected_codes = ['\n'.join(read_cafe_codes_only(self.file_path, checkbox)) for checkbox in checked_checkboxes]
+        selected_codes = ['\n'.join(ReadXML.read_cafe_codes_only(self.file_path, checkbox)) for checkbox in checked_checkboxes]
         
         if selected_codes == [''] or selected_codes == []:
             pass
@@ -326,15 +316,14 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
             self.send_ram_writes()
             self.send_cafe_codes()
         except Exception as e:
-            self.window = ErrorWindow()
-            self.window.CreateWindow("Code Error!", f"<b></b>Used IPv4: {self.Connection_Bar.text()}<br/>Error: {e}.", 500, 200)
+            self.ErrorWindow.CreateWindow("Code Error!", f"<b></b>Used IPv4: {self.Connection_Bar.text()}<br/>Error: {e}.", 500, 200)
             self.window.show()
 
     def disable_ram_writes(self):
         checked_checkboxes = self.get_checked_checkboxes(self.Checkbox_ScrollArea)
-        codes = [read_ram_writes_only(self.file_path, checkbox) 
+        codes = [ReadXML.read_ram_writes_only(self.file_path, checkbox) 
                 for checkbox in checked_checkboxes]
-        code_str = remove_extra_lines('\n'.join('\n'.join(c for c in code) for code in codes))
+        code_str = ReadXML.remove_extra_lines('\n'.join('\n'.join(c for c in code) for code in codes))
 
         if codes == [[]] or codes == []:
             pass
@@ -349,9 +338,9 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
 
     def disable_cafe_codes(self):
         checked_checkboxes = self.get_checked_checkboxes(self.Checkbox_ScrollArea)
-        codes = [read_cafe_codes_only(self.file_path, checkbox) 
+        codes = [ReadXML.read_cafe_codes_only(self.file_path, checkbox) 
                 for checkbox in checked_checkboxes]
-        code_str = remove_extra_lines('\n'.join('\n'.join(c for c in code) for code in codes))
+        code_str = ReadXML.remove_extra_lines('\n'.join('\n'.join(c for c in code) for code in codes))
 
         if codes == [''] or codes == []:
             pass
@@ -376,15 +365,15 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
             self.disable_ram_writes()
             self.disable_cafe_codes()
         except Exception as e:
-            self.window = ErrorWindow()
-            self.window.CreateWindow("Code Error!", f"<b></b>Used IPv4: {self.Connection_Bar.text()}<br/>Error: {e}.", 500, 200)
+            self.ErrorWindow.CreateWindow("Code Error!", f"<b></b>Used IPv4: {self.Connection_Bar.text()}<br/>Error: {e}.", 500, 200)
             self.window.show()
                 
     def load_code_list(self):
         # Create a dialog to allow the user to select their file
-        dialog = QtWidgets.QFileDialog(self)
-        dialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
-        dialog.setOption(QtWidgets.QFileDialog.DontUseNativeDialog, False)
+        dialog = PyQt5.QtWidgets.QFileDialog(self)
+        dialog.setFileMode(PyQt5.QtWidgets.QFileDialog.ExistingFile)
+        dialog.setOption(PyQt5.QtWidgets.QFileDialog.DontUseNativeDialog, False)
+        dialog.setDirectory("./codes")
 
         # Add filters for XML and All files
         filters = ["XML Files (*.xml)", "All Files (*.*)"]
@@ -402,12 +391,12 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
     def open_code_docs(self):
         '''If you'd rather open the link in your browser, then uncomment this line, and comment the 2 class lines'''
         #webbrowser.open("http://web.archive.org/web/20171108014746/http://cosmocortney.ddns.net:80/enzy/cafe_code_types_en.php")
-        self.CodeDocsViewer = HTMLViewer(html_content)
+        self.CodeDocsViewer = CodeDocs.HTMLViewer(CodeDocs.html_content)
         self.CodeDocsViewer.show()
         
     def open_search_menu(self):
         # Create instance of SearchMenu class and show it
-        self.search_menu = SearchMenu(self.checkboxes, self.Checkbox_ScrollArea)
+        self.search_menu = SearchMenu.SearchMenu(self.checkboxes, self.Checkbox_ScrollArea)
         self.search_menu.show()
         
     def get_checked_checkboxes(self, scroll_area):
@@ -415,7 +404,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
         checked_checkboxes_text = []
 
         for widget in scroll_area.widget().children():
-            if isinstance(widget, QtWidgets.QCheckBox) and widget.isChecked():
+            if isinstance(widget, PyQt5.QtWidgets.QCheckBox) and widget.isChecked():
                 checked_checkboxes.append(widget)
                 checked_checkboxes_text.append(widget.text())
 
@@ -425,16 +414,16 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
         checked_checkboxes = self.get_checked_checkboxes(self.Checkbox_ScrollArea)
         selected_codes = []
         for checkbox in checked_checkboxes:
-            codes = read_codes(self.file_path, checkbox)
+            codes = ReadXML.read_codes(self.file_path, checkbox)
             code_str = "\n".join(codes)
             selected_codes.append(code_str)
         code_str = "\n".join(selected_codes)
         
-        self.ExportGCTUWindow = ExportGCTUWindow(code_str)
+        self.ExportGCTUWindow = GctuExport.ExportGCTUWindow(code_str)
         self.ExportGCTUWindow.show()
         
     def import_gctu_process(self):
-        self.ImportGCTUWindow = ImportGCTUWindow()
+        self.ImportGCTUWindow = GctuImport.ImportGCTUWindow()
         self.ImportGCTUWindow.show()
         self.ImportGCTUWindow.confirm_button.clicked.connect(self.refresh_gui)
         
@@ -477,7 +466,7 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
 
     def change_theme(self, index):
         theme_name = self.SetTheme_ComboBox.currentText()
-        QtWidgets.QApplication.setStyle(theme_name)
+        PyQt5.QtWidgets.QApplication.setStyle(theme_name)
         print(f"[QtGecko]: Theme changed to: {theme_name}")
         self.config_manager.write_theme(theme_name)
     ### Miscellaneous Tab functions end ###
@@ -488,13 +477,13 @@ class Main(QtWidgets.QMainWindow, QtGecko_GUI):
     ### External Tools tab functions end ###
 
 def set_icon(QApp):
-    decoded_data = base64.b64decode(GeckoIcon)
-    pixmap = QtGui.QPixmap()
+    decoded_data = base64.b64decode(GeckoIcon.GeckoIcon)
+    pixmap = PyQt5.QtGui.QPixmap()
     pixmap.loadFromData(decoded_data)
-    QApp.setWindowIcon(QtGui.QIcon(pixmap))
+    QApp.setWindowIcon(PyQt5.QtGui.QIcon(pixmap))
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
+    app = PyQt5.QtWidgets.QApplication(sys.argv)
     set_icon(app)
     window = Main("./codes/null.xml")
     app.setStyle(window.set_theme)

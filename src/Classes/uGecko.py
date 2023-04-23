@@ -1,11 +1,13 @@
-import socket, struct
-from typing import Union
-
-from Classes.Commands import Commands
-
-from Classes.Errors import *
-from Classes.Memory import Memory
-from Classes.Verification import IP_Verification
+if __name__ == "__main__":
+    print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
+    exit()
+else:
+    import socket, struct
+    from typing import Union
+    from Classes.Commands import Commands
+    from Classes.Errors import *
+    from Classes.Memory import Memory
+    from Classes.Verification import IP_Verification
 
 class uGecko:
     """Python library for use with TCPGecko. Requires kernel exploit to use."""

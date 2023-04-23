@@ -1,4 +1,8 @@
-from enum import Enum
+if __name__ == "__main__":
+    print("This is a module that is imported by 'uGecko.py'. Don't run it directly.")
+    exit()
+else:
+    from enum import Enum
 
 class Commands(Enum):
     POKE_8                      = b'\x01'

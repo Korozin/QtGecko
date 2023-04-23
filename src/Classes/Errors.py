@@ -1,3 +1,9 @@
+if __name__ == "__main__":
+    print("This is a module that is imported by 'uGecko.py'. Don't run it directly.")
+    exit()
+else:
+    pass
+
 class NoIpEnteredException(Exception): pass
 class InvalidIpAddressException(Exception): pass
 class ConnectionIsAlreadyInProgressException(Exception): pass

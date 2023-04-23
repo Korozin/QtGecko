@@ -1,3 +1,9 @@
+if __name__ == "__main__":
+    print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
+    exit()
+else:
+    pass
+
 # Functions for reading XML file
 def read_names(file_path):
     # Open the XML file

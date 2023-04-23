@@ -1,5 +1,9 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
-import sys, re, webbrowser
+if __name__ == "__main__":
+    print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
+    exit()
+else:
+    from PyQt5 import QtWidgets, QtGui, QtCore
+    import sys, re, webbrowser
 
 class ExportGCTUWindow(QtWidgets.QWidget):
     def __init__(self, input_string, parent=None):

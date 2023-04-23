@@ -1,4 +1,8 @@
-import os, configparser
+if __name__ == "__main__":
+    print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
+    exit()
+else:
+    import os, configparser
 
 class ConfigManager:
     SECTION_NAME = 'OPTIONS'

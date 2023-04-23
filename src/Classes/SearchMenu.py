@@ -1,4 +1,8 @@
-from PyQt5 import QtWidgets
+if __name__ == "__main__":
+    print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
+    exit()
+else:
+    from PyQt5 import QtWidgets
 
 class SearchMenu(QtWidgets.QWidget):
 

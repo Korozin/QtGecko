@@ -1,5 +1,9 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from Classes.CodeTextWidget import Editor
+if __name__ == "__main__":
+    print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
+    exit()
+else:
+    from PyQt5 import QtCore, QtGui, QtWidgets
+    from Classes.CodeTextWidget import Editor
 
 class QtGecko_GUI(object):
     def setupUi(self, MainWindow):

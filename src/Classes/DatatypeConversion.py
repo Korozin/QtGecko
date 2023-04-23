@@ -1,5 +1,9 @@
-import sys, struct
-from PyQt5 import QtWidgets, QtCore, QtGui
+if __name__ == "__main__":
+    print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
+    exit()
+else:
+    import sys, struct
+    from PyQt5 import QtWidgets, QtCore, QtGui
 
 class DatatypeConversion(QtWidgets.QMainWindow):
     def __init__(self):

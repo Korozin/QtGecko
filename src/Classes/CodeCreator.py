@@ -1,6 +1,10 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from Classes.CodeTextWidget import Editor
-from Classes.ErrorWindow import ErrorWindow
+if __name__ == "__main__":
+    print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
+    exit()
+else:
+    from PyQt5 import QtCore, QtGui, QtWidgets
+    from Classes.CodeTextWidget import Editor
+    from Classes.ErrorWindow import ErrorWindow
 
 class CodeCreator(QtWidgets.QMainWindow):
     def __init__(self, file_path):

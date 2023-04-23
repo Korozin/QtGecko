@@ -1,4 +1,8 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+if __name__ == "__main__":
+    print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
+    exit()
+else:
+    from PyQt5 import QtCore, QtGui, QtWidgets
 
 class LineNumberArea(QtWidgets.QWidget):
     def __init__(self, editor):
