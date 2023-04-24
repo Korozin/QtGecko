@@ -2,10 +2,10 @@ if __name__ == "__main__":
     print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
     exit()
 else:
-    import sys, re, webbrowser, os
-    from PyQt5 import QtWidgets, QtGui, QtCore
+    import sys, re, webbrowser, \
+           os, PyQt5
 
-class ImportGCTUWindow(QtWidgets.QWidget):
+class ImportGCTUWindow(PyQt5.QtWidgets.QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         
@@ -13,22 +13,22 @@ class ImportGCTUWindow(QtWidgets.QWidget):
         self.setWindowTitle('Import GCTU')
         self.setFixedSize(600, 100)
         
-        main_layout = QtWidgets.QVBoxLayout(self)
-        row1_layout = QtWidgets.QHBoxLayout()
-        row2_layout = QtWidgets.QHBoxLayout()
+        main_layout = PyQt5.QtWidgets.QVBoxLayout(self)
+        row1_layout = PyQt5.QtWidgets.QHBoxLayout()
+        row2_layout = PyQt5.QtWidgets.QHBoxLayout()
         
         self.center_screen()
         
-        file_name_label = QtWidgets.QLabel("File Name:")
-        self.file_name_line_edit = QtWidgets.QLineEdit()
+        file_name_label = PyQt5.QtWidgets.QLabel("File Name:")
+        self.file_name_line_edit = PyQt5.QtWidgets.QLineEdit()
         self.file_name_line_edit.textChanged.connect(self.check_validity)
-        self.browse_file_button = QtWidgets.QPushButton("...")
+        self.browse_file_button = PyQt5.QtWidgets.QPushButton("...")
         self.browse_file_button.clicked.connect(self.browse_gctu_file)
         row1_layout.addWidget(file_name_label)
         row1_layout.addWidget(self.file_name_line_edit)
         row1_layout.addWidget(self.browse_file_button)
         
-        self.confirm_button = QtWidgets.QPushButton("Confirm")
+        self.confirm_button = PyQt5.QtWidgets.QPushButton("Confirm")
         self.confirm_button.clicked.connect(self.on_confirm)
         row2_layout.addWidget(self.confirm_button)
         
@@ -39,7 +39,7 @@ class ImportGCTUWindow(QtWidgets.QWidget):
         
     def center_screen(self):
         frame_geometry = self.frameGeometry()
-        calculate_screen = QtWidgets.QDesktopWidget().availableGeometry().center()
+        calculate_screen = PyQt5.QtWidgets.QDesktopWidget().availableGeometry().center()
         frame_geometry.moveCenter(calculate_screen)
         self.move(frame_geometry.topLeft())
         
@@ -92,14 +92,14 @@ class ImportGCTUWindow(QtWidgets.QWidget):
             end_index = content.find('</entry>', start_index) + len('</entry>')
 
             if end_index == -1:
-                print(f'[QtGecko]: Invalid XML Format!')
+                print(f'{colorama.Fore.MAGENTA}[QtGecko]: {colorama.Fore.RESET}Invalid XML Format!')
             elif start_index == -1:
-                print(f'[QtGecko]: Entry: {entry_name} does not exist. Creating it.')
+                print(f'{colorama.Fore.MAGENTA}[QtGecko]: {colorama.Fore.RESET}Entry: {colorama.Fore.YELLOW}\'{entry_name}\' {colorama.Fore.RESET}does not exist. Creating it.')
                 new_content = content.replace('</codes>', new_entry + '</codes>')
                 with open(self.xml_path, 'w') as f:
                     f.write(new_content)
             else:
-                print(f'[QtGecko]: Edited entry: {entry_name}')
+                print(f'{colorama.Fore.MAGENTA}[QtGecko]: {colorama.Fore.RESET}Edited entry: {colorama.Fore.YELLOW}\'{entry_name}\'{colorama.Fore.RESET}')
                 new_content = content[:start_index] + appended_entry + content[end_index:]
                 with open(self.xml_path, 'w') as f:
                     f.write(new_content)
@@ -107,9 +107,9 @@ class ImportGCTUWindow(QtWidgets.QWidget):
             self.close()
         
     def browse_gctu_file(self):
-        dialog = QtWidgets.QFileDialog(self)
-        dialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
-        dialog.setOption(QtWidgets.QFileDialog.DontUseNativeDialog, False)
+        dialog = PyQt5.QtWidgets.QFileDialog(self)
+        dialog.setFileMode(PyQt5.QtWidgets.QFileDialog.ExistingFile)
+        dialog.setOption(PyQt5.QtWidgets.QFileDialog.DontUseNativeDialog, False)
         
         # Add filters for XML and All files
         filters = ["GCTU Files (*.gctu)", "All Files (*.*)"]

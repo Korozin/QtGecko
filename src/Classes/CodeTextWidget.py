@@ -2,21 +2,21 @@ if __name__ == "__main__":
     print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
     exit()
 else:
-    from PyQt5 import QtCore, QtGui, QtWidgets
+    import PyQt5
 
-class LineNumberArea(QtWidgets.QWidget):
+class LineNumberArea(PyQt5.QtWidgets.QWidget):
     def __init__(self, editor):
         super().__init__(editor)
         self.editor = editor
         self.setAutoFillBackground(True)
 
     def sizeHint(self):
-        return QtCore.QSize(self.editor.lineNumberAreaWidth(), 0)
+        return PyQt5.QtCore.QSize(self.editor.lineNumberAreaWidth(), 0)
 
     def paintEvent(self, event):
-        palette = QtWidgets.QApplication.palette()  # use the application's palette instead of the editor's palette
-        painter = QtGui.QPainter(self)
-        color = palette.color(QtGui.QPalette.Window)
+        palette = PyQt5.QtWidgets.QApplication.palette()  # use the application's palette instead of the editor's palette
+        painter = PyQt5.QtGui.QPainter(self)
+        color = palette.color(PyQt5.QtGui.QPalette.Window)
         painter.fillRect(event.rect(), color)
 
         fontMetrics = painter.fontMetrics()
@@ -29,8 +29,8 @@ class LineNumberArea(QtWidgets.QWidget):
             if bottom >= event.rect().top():
                 # Draw the line number
                 lineNumberText = str(lineNumber)
-                lineNumberRect = QtCore.QRect(0, int(top), self.width() - 6, fontMetrics.height())
-                painter.drawText(lineNumberRect, QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter, lineNumberText)
+                lineNumberRect = PyQt5.QtCore.QRect(0, int(top), self.width() - 6, fontMetrics.height())
+                painter.drawText(lineNumberRect, PyQt5.QtCore.Qt.AlignRight | PyQt5.QtCore.Qt.AlignVCenter, lineNumberText)
 
             currentBlock = currentBlock.next()
             top = bottom
@@ -38,7 +38,7 @@ class LineNumberArea(QtWidgets.QWidget):
             lineNumber += 1
 
 
-class Editor(QtWidgets.QPlainTextEdit, object):
+class Editor(PyQt5.QtWidgets.QPlainTextEdit, object):
     def __init__(self, parent=None):
         super(Editor, self).__init__(parent)
         self.lineNumberArea = LineNumberArea(self)
@@ -73,15 +73,15 @@ class Editor(QtWidgets.QPlainTextEdit, object):
     def resizeEvent(self, event):
         super(Editor, self).resizeEvent(event)
         cr = self.contentsRect()
-        self.lineNumberArea.setGeometry(QtCore.QRect(cr.left(), cr.top(), self.lineNumberAreaWidth(), cr.height()))
+        self.lineNumberArea.setGeometry(PyQt5.QtCore.QRect(cr.left(), cr.top(), self.lineNumberAreaWidth(), cr.height()))
 
     def highlightCurrentLine(self):
         extraSelections = []
         if not self.isReadOnly():
-            selection = QtWidgets.QTextEdit.ExtraSelection()
-            lineColor = QtGui.QColor(QtCore.Qt.yellow).lighter(160)
+            selection = PyQt5.QtWidgets.QTextEdit.ExtraSelection()
+            lineColor = PyQt5.QtGui.QColor(PyQt5.QtCore.Qt.yellow).lighter(160)
             selection.format.setBackground(lineColor)
-            selection.format.setProperty(QtGui.QTextFormat.FullWidthSelection, True)
+            selection.format.setProperty(PyQt5.QtGui.QTextFormat.FullWidthSelection, True)
             selection.cursor = self.textCursor()
             selection.cursor.clearSelection()
             extraSelections.append(selection)

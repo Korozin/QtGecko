@@ -2,7 +2,7 @@ if __name__ == "__main__":
     print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
     exit()
 else:
-    pass
+    import colorama
 
 # Functions for reading XML file
 def read_names(file_path):
@@ -94,14 +94,14 @@ def read_ram_writes_only(file_path, entry_name):
 
     # If specified entry name is not found in the file, print an error message
     if entry_start == -1:
-        print('Entry name "{}" not found in file'.format(entry_name))
+        print(f'{colorama.Fore.MAGENTA}[QtGecko]:{colorama.Fore.RESET} Entry name {colorama.Fore.YELLOW}\'{entry_name}\'{colorama.Fore.RESET} not found in XML')
         return []
 
     entry_end = data.find(entry_end_tag, entry_start)
 
     # If specified entry name is not found in the file, print an error message
     if entry_end == -1:
-        print('Entry name "{}" not found in file'.format(entry_name))
+        print(f'{colorama.Fore.MAGENTA}[QtGecko]:{colorama.Fore.RESET}Entry name {colorama.Fore.YELLOW}\'{entry_name}\'{colorama.Fore.RESET} not found in XML')
         return []
 
     # Check if the entry's assembly_ram_write flag is true
@@ -140,14 +140,14 @@ def read_cafe_codes_only(file_path, entry_name):
 
     # If specified entry name is not found in the file, print an error message
     if entry_start == -1:
-        print('Entry name "{}" not found in file'.format(entry_name))
+        print(f'{colorama.Fore.MAGENTA}[QtGecko]:{colorama.Fore.RESET}Entry name {colorama.Fore.YELLOW}\'{entry_name}\'{colorama.Fore.RESET} not found in XML')
         return []
 
     entry_end = data.find(entry_end_tag, entry_start)
 
     # If specified entry name is not found in the file, print an error message
     if entry_end == -1:
-        print('Entry name "{}" not found in file'.format(entry_name))
+        print(f'{colorama.Fore.MAGENTA}[QtGecko]:{colorama.Fore.RESET}Entry name {colorama.Fore.YELLOW}\'{entry_name}\'{colorama.Fore.RESET} not found in XML')
         return []
 
     # Check if the entry's assembly_ram_write flag is true
@@ -191,7 +191,7 @@ def read_code_comments(file_path, entry_name):
 
     # If specified entry name is not found in the file, print an error message
     if entry_start == -1:
-        print('Entry name "{}" not found in file'.format(entry_name))
+        print(f'{colorama.Fore.MAGENTA}[QtGecko]:{colorama.Fore.RESET}Entry name {colorama.Fore.YELLOW}\'{entry_name}\'{colorama.Fore.RESET} not found in XML')
         return
 
     # Find all the <code> tags within the specified entry and extract their text content
@@ -222,7 +222,7 @@ def read_code_authors(file_path, entry_name):
 
     # If specified entry name is not found in the file, print an error message
     if entry_start == -1:
-        print('Entry name "{}" not found in file'.format(entry_name))
+        print(f'{colorama.Fore.MAGENTA}[QtGecko]:{colorama.Fore.RESET}Entry name {colorama.Fore.YELLOW}\'{entry_name}\'{colorama.Fore.RESET} not found in XML')
         return
 
     # Find all the <code> tags within the specified entry and extract their text content

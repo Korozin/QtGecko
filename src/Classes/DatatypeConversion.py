@@ -2,10 +2,9 @@ if __name__ == "__main__":
     print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
     exit()
 else:
-    import sys, struct
-    from PyQt5 import QtWidgets, QtCore, QtGui
+    import sys, struct, PyQt5
 
-class DatatypeConversion(QtWidgets.QMainWindow):
+class DatatypeConversion(PyQt5.QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
 
@@ -13,23 +12,23 @@ class DatatypeConversion(QtWidgets.QMainWindow):
         self.setWindowTitle("Datatype Conversion | KorOwOzin")
 
         # Create QFont instance, and set font size to 10
-        font = QtGui.QFont()
+        font = PyQt5.QtGui.QFont()
         font.setPointSize(10)
 
         # Create the input label
-        input_label = QtWidgets.QLabel("Input:", self)
+        input_label = PyQt5.QtWidgets.QLabel("Input:", self)
 
         # Create the input text edit
-        self.input_text = QtWidgets.QTextEdit(self)
+        self.input_text = PyQt5.QtWidgets.QTextEdit(self)
         self.input_text.setFixedHeight(86)
         #self.input_text.setFixedWidth(430)
         self.input_text.setFont(font)
 
         # Create the output label
-        output_label = QtWidgets.QLabel("Converted:", self)
+        output_label = PyQt5.QtWidgets.QLabel("Converted:", self)
 
         # Create the output text browser
-        self.output_text = QtWidgets.QTextBrowser(self)
+        self.output_text = PyQt5.QtWidgets.QTextBrowser(self)
         self.output_text.setReadOnly(True)
         self.output_text.setFixedHeight(86)
         #self.output_text.setFixedWidth(430)
@@ -37,13 +36,13 @@ class DatatypeConversion(QtWidgets.QMainWindow):
         self.output_text.setFont(font)
         
         # Create the output indication label
-        self.indicator_label = QtWidgets.QLabel("Result: OK!\n", self)
+        self.indicator_label = PyQt5.QtWidgets.QLabel("Result: OK!\n", self)
         
         # Create Conversion Type Label
-        conversion_type_label = QtWidgets.QLabel('Conversion Type:', self)
+        conversion_type_label = PyQt5.QtWidgets.QLabel('Conversion Type:', self)
         
         # Create the Drop-down Menu
-        self.conversion_type_menu = QtWidgets.QComboBox(self)
+        self.conversion_type_menu = PyQt5.QtWidgets.QComboBox(self)
         self.conversion_type_menu.addItems([' UTF-8', ' Decimal', ' Float'])
         self.conversion_type_menu.setCurrentIndex(1)
         self.conversion_type_menu.setFixedHeight(28)
@@ -51,46 +50,46 @@ class DatatypeConversion(QtWidgets.QMainWindow):
         self.conversion_type_menu.setToolTip("The conversion type to use")
         
         # Create the Check-Box for "Unicode"
-        self.unicode_checkbox = QtWidgets.QCheckBox('Unicode', self)
+        self.unicode_checkbox = PyQt5.QtWidgets.QCheckBox('Unicode', self)
         self.unicode_checkbox.setToolTip("Whether to convert to unicode or UTF-8")
         self.unicode_checkbox.setEnabled(True)
         
         # Create the Check-Box for "From Hexadecimal"
-        self.hexadecimal_checkbox = QtWidgets.QCheckBox('From Hexadecimal', self)
+        self.hexadecimal_checkbox = PyQt5.QtWidgets.QCheckBox('From Hexadecimal', self)
         self.hexadecimal_checkbox.setToolTip("Whether to convert from or to hexadecimal")
 
         # Create the copy button
-        self.copy_button = QtWidgets.QPushButton("Copy Result", self)
+        self.copy_button = PyQt5.QtWidgets.QPushButton("Copy Result", self)
         self.copy_button.setFixedHeight(28)
         self.copy_button.clicked.connect(self.copy_result)
 
         # Add Input Label and Input Text to Vertical Layout
-        input_layout = QtWidgets.QVBoxLayout()
+        input_layout = PyQt5.QtWidgets.QVBoxLayout()
         input_layout.addWidget(input_label)
         input_layout.addWidget(self.input_text)
 
         # Add Output Label and Output Text to Vertical Layout
-        output_layout = QtWidgets.QVBoxLayout()
+        output_layout = PyQt5.QtWidgets.QVBoxLayout()
         output_layout.addWidget(output_label)
         output_layout.addWidget(self.output_text)
         output_layout.addWidget(self.indicator_label)
         
         # Add Conversion Type Label and Dropdwon Menu to Horizontal Layout
-        conv_type_layout = QtWidgets.QHBoxLayout()
+        conv_type_layout = PyQt5.QtWidgets.QHBoxLayout()
         conv_type_layout.addWidget(conversion_type_label)
         conv_type_layout.addWidget(self.conversion_type_menu)
         
         # Add Unicode and From Hex Checkbox to Horizontal Layout
-        checkbox_layout = QtWidgets.QHBoxLayout()
+        checkbox_layout = PyQt5.QtWidgets.QHBoxLayout()
         checkbox_layout.addWidget(self.unicode_checkbox)
         checkbox_layout.addWidget(self.hexadecimal_checkbox)
 
         # Add Copy and Copy Button to Horizontal Layout
-        button_layout = QtWidgets.QHBoxLayout()
+        button_layout = PyQt5.QtWidgets.QHBoxLayout()
         button_layout.addWidget(self.copy_button)
 
         # Add all Widgets to a Main Vertical Layout
-        main_layout = QtWidgets.QVBoxLayout()
+        main_layout = PyQt5.QtWidgets.QVBoxLayout()
         main_layout.addLayout(input_layout)
         main_layout.addLayout(output_layout)
         main_layout.addLayout(conv_type_layout)
@@ -98,13 +97,13 @@ class DatatypeConversion(QtWidgets.QMainWindow):
         main_layout.addLayout(button_layout)
 
         # Create a central widget
-        central_widget = QtWidgets.QWidget(self)
+        central_widget = PyQt5.QtWidgets.QWidget(self)
         central_widget.setLayout(main_layout)
         self.setCentralWidget(central_widget)
         
         # Always start centered on-screen
         qr = self.frameGeometry()
-        cp = QtWidgets.QDesktopWidget().availableGeometry().center()
+        cp = PyQt5.QtWidgets.QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
         
@@ -386,6 +385,6 @@ class DatatypeConversion(QtWidgets.QMainWindow):
 
     # Function to copy Output to Clipboard
     def copy_result(self):
-        clip = QtWidgets.QApplication.clipboard()
+        clip = PyQt5.QtWidgets.QApplication.clipboard()
         clip.setText(self.output_text.toPlainText())
         clip.setText(self.output_text.toPlainText())

@@ -1,7 +1,7 @@
 # -------------------------------------------------------- #
 import os, sys, math, \
        base64, socket, PyQt5, \
-       functools, webbrowser
+       functools, webbrowser, colorama
 
 from Classes import uGecko, MainWindow, ReadXML, \
                     Verification, ConfigManager, ErrorWindow, \
@@ -27,7 +27,7 @@ class Main(PyQt5.QtWidgets.QMainWindow, MainWindow.QtGecko_GUI):
             os.makedirs("./codes", exist_ok=True)
             with open(self.file_path, "w") as f:
                 f.write('<codes>\n</codes>')
-            print("[QtGecko]: Template XML created")
+            print(f"{colorama.Fore.MAGENTA}[QtGecko]: {colorama.Fore.RESET}Template XML created")
 
         # Config operations
         self.config_path = "config.ini"
@@ -117,7 +117,9 @@ class Main(PyQt5.QtWidgets.QMainWindow, MainWindow.QtGecko_GUI):
                 self.connection_timeout_timer.start(1800000) # 30 minute time-frame
                 self.connection_timeout_timer.timeout.connect(self.disconnect)
             else:
-                print("[QtGecko]: How the hell did you even get this error?")
+                print(f"{colorama.Fore.MAGENTA}[QtGecko]: \
+                     {colorama.Fore.RESET}\
+                     How the hell did you even get this error?")
                 pass
 
             # Set proper GUI elements based on connectivity
@@ -134,10 +136,16 @@ class Main(PyQt5.QtWidgets.QMainWindow, MainWindow.QtGecko_GUI):
             self.InfoWindow.show()
 
         except Exception as e:
-            self.ErrorWindow.CreateWindow("Connection Error!", f"<b></b>Used IPv4: {self.Connection_Bar.text()}<br/>Error: {e}.<br/><br/>If you're unable to connect, then submit an issue on <a href='https://github.com/Korozin/QtGecko/issues'>GitHub</a>, or consult the <a href='https://github.com/Korozin/QtGecko/blob/main/SETUP-GUIDE.md'>Setup Guide</a>.", 500, 200)
+            self.ErrorWindow.CreateWindow("Connection Error!", \
+                                         f"Used IPv4: <b>{self.Connection_Bar.text()}</b><br/>Error: {e}.\
+                                         <br/><br/>If you're unable to connect, then submit an issue on \
+                                         <a href='https://github.com/Korozin/QtGecko/issues'>GitHub</a>, \
+                                         or consult the <a href='https://github.com/Korozin/QtGecko/\
+                                         blob/main/SETUP-GUIDE.md'>Setup Guide</a>.", \
+                                         500, 200)
             self.ErrorWindow.show()
 
-            print("[uGecko]: Connection attempt failed.. :(")
+            print(f"{colorama.Fore.CYAN}[uGecko]:{colorama.Fore.RESET} Connection attempt failed.. :(")
 
     def disconnect(self):
         try:
@@ -150,11 +158,19 @@ class Main(PyQt5.QtWidgets.QMainWindow, MainWindow.QtGecko_GUI):
             self.Connect_Button.setEnabled(True)
             self.Connection_Bar.deselect()
         except Exception as e:
-            self.ErrorWindow.CreateWindow("Error!", f"<b></b>Used IPv4: {self.Connection_Bar.text()}<br/>Error: {e}.", 500, 200)
+            self.ErrorWindow.CreateWindow("Error!", \
+                                         f"Used IPv4: <b>{self.Connection_Bar.text()}</b><br/>Error: {e}.", \
+                                         500, 200)
             self.window.show()
 
     def help(self):
-        self.InfoWindow.CreateWindow("Help", "If you can't connect, then make sure to follow the <a href='https://github.com/Korozin/QtGecko/blob/main/SETUP-GUIDE.md'>setup guide</a>.<br/><br/>If you're still having issues then please submit an issue on <a href='https://github.com/Korozin/QtGecko/issues'>GitHub</a>.", 500, 200)
+        self.InfoWindow.CreateWindow("Help", \
+                                     "If you can't connect, then make sure to follow the \
+                                     <a href='https://github.com/Korozin/QtGecko/blob/main/SETUP-GUIDE.md'>\
+                                     setup guide</a>.<br/><br/>\
+                                     If you're still having issues then please submit an issue on \
+                                     <a href='https://github.com/Korozin/QtGecko/issues'>GitHub</a>.", \
+                                     500, 200)
         self.InfoWindow.show()
     ### MainWindow functions end ###
     
@@ -263,7 +279,11 @@ class Main(PyQt5.QtWidgets.QMainWindow, MainWindow.QtGecko_GUI):
             
     def export_code_list(self):
         options = PyQt5.QtWidgets.QFileDialog.Options()
-        file_name, _ = PyQt5.QtWidgets.QFileDialog.getSaveFileName(self, "Save File", "", "XML Files (*.xml)", options=options)
+        file_name, _ = PyQt5.QtWidgets.QFileDialog.getSaveFileName(self, \
+                                                                  "Save File", \
+                                                                  "", \
+                                                                  "XML Files (*.xml)", \
+                                                                  options=options)
         
         if file_name:
             with open(self.file_path, 'r') as f:
@@ -316,7 +336,9 @@ class Main(PyQt5.QtWidgets.QMainWindow, MainWindow.QtGecko_GUI):
             self.send_ram_writes()
             self.send_cafe_codes()
         except Exception as e:
-            self.ErrorWindow.CreateWindow("Code Error!", f"<b></b>Used IPv4: {self.Connection_Bar.text()}<br/>Error: {e}.", 500, 200)
+            self.ErrorWindow.CreateWindow("Code Error!", \
+                                         f"Used IPv4: <b>{self.Connection_Bar.text()}<b/><br/>Error: {e}.", \
+                                         500, 200)
             self.window.show()
 
     def disable_ram_writes(self):
@@ -365,7 +387,9 @@ class Main(PyQt5.QtWidgets.QMainWindow, MainWindow.QtGecko_GUI):
             self.disable_ram_writes()
             self.disable_cafe_codes()
         except Exception as e:
-            self.ErrorWindow.CreateWindow("Code Error!", f"<b></b>Used IPv4: {self.Connection_Bar.text()}<br/>Error: {e}.", 500, 200)
+            self.ErrorWindow.CreateWindow("Code Error!", \
+                                         f"Used IPv4: <b>{self.Connection_Bar.text()}<b/><br/>Error: {e}.", \
+                                         500, 200)
             self.window.show()
                 
     def load_code_list(self):
@@ -389,8 +413,11 @@ class Main(PyQt5.QtWidgets.QMainWindow, MainWindow.QtGecko_GUI):
         self.refresh_gui()
         
     def open_code_docs(self):
-        '''If you'd rather open the link in your browser, then uncomment this line, and comment the 2 class lines'''
-        #webbrowser.open("http://web.archive.org/web/20171108014746/http://cosmocortney.ddns.net:80/enzy/cafe_code_types_en.php")
+        # To open using Browser
+        #webbrowser.open("http://web.archive.org/web/20171108014746/\
+        #http://cosmocortney.ddns.net:80/enzy/cafe_code_types_en.php")
+
+        # To open using QtGecko
         self.CodeDocsViewer = CodeDocs.HTMLViewer(CodeDocs.html_content)
         self.CodeDocsViewer.show()
         
@@ -433,19 +460,28 @@ class Main(PyQt5.QtWidgets.QMainWindow, MainWindow.QtGecko_GUI):
 
     ### Miscellaneous Tab functions ###
     def get_wiiu_firmware(self):
-        self.InfoWindow.CreateWindow("Wii U Firmware Version", f"Firmware Version: {self.tcp_con.getOsVersion()}", 320, 150)
+        self.InfoWindow.CreateWindow("Wii U Firmware Version", \
+                                    f"Firmware Version: {self.tcp_con.getOsVersion()}", \
+                                    320, 150)
         self.InfoWindow.show()
 
     def show_local_ip(self):
-        self.InfoWindow.CreateWindow("Local IPv4", f"Host name: {socket.gethostname()}<br/>Host IPv4: {socket.gethostbyname(socket.gethostname())}", 320, 150)
+        self.InfoWindow.CreateWindow("Local IPv4", \
+                                    f"Host name: {socket.gethostname()}<br/> \
+                                    Host IPv4: {socket.gethostbyname(socket.gethostname())}", \
+                                    320, 150)
         self.InfoWindow.show()
 
     def get_tcp_server_version(self):
-        self.InfoWindow.CreateWindow("Server Version", f"TCPGecko Server Version: {self.tcp_con.getServerVersion()}", 320, 150)
+        self.InfoWindow.CreateWindow("Server Version", \
+                                    f"TCPGecko Server Version: {self.tcp_con.getServerVersion()}", \
+                                    320, 150)
         self.InfoWindow.show()
 
     def show_build_date(self):
-        self.InfoWindow.CreateWindow("Build Date", "April 19, 2023, 02:44:35 PM", 280, 150)
+        self.InfoWindow.CreateWindow("Build Date", \
+                                     "April 19, 2023, 02:44:35 PM", \
+                                     280, 150)
         self.InfoWindow.show()
 
     def open_bug_tracker(self):
@@ -461,13 +497,15 @@ class Main(PyQt5.QtWidgets.QMainWindow, MainWindow.QtGecko_GUI):
         elif not self.ConnectionTimeout_Checkbox.isChecked():
             self.config_manager.write_timeout_false()
         else:
-            print("[QtGecko]: How the hell did you even get this error?")
+            print(f"{colorama.Fore.MAGENTA}[QtGecko]:\
+                 {colorama.Fore.RESET} \
+                 How the hell did you even get this error?")
             pass
 
     def change_theme(self, index):
         theme_name = self.SetTheme_ComboBox.currentText()
         PyQt5.QtWidgets.QApplication.setStyle(theme_name)
-        print(f"[QtGecko]: Theme changed to: {theme_name}")
+        print(f"{colorama.Fore.MAGENTA}[QtGecko]: {colorama.Fore.RESET}Theme changed to: {theme_name}")
         self.config_manager.write_theme(theme_name)
     ### Miscellaneous Tab functions end ###
 

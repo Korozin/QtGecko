@@ -2,11 +2,11 @@ if __name__ == "__main__":
     print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
     exit()
 else:
-    from PyQt5 import QtCore, QtGui, QtWidgets
-    from Classes.CodeTextWidget import Editor
-    from Classes.ErrorWindow import ErrorWindow
+    import PyQt5, colorama
+    
+    from Classes import CodeTextWidget, ErrorWindow
 
-class CodeCreator(QtWidgets.QMainWindow):
+class CodeCreator(PyQt5.QtWidgets.QMainWindow):
     def __init__(self, file_path):
         super().__init__()
 
@@ -19,73 +19,73 @@ class CodeCreator(QtWidgets.QMainWindow):
         self.setWindowTitle("Code Creator | KorOwOzin")
 
         # Create elements
-        self.title_label = QtWidgets.QLabel("Title:", self)
+        self.title_label = PyQt5.QtWidgets.QLabel("Title:", self)
         self.title_label.move(5, 5)
         
-        self.title_edit = QtWidgets.QLineEdit(self)
+        self.title_edit = PyQt5.QtWidgets.QLineEdit(self)
         self.title_edit.resize(635, 18)
         self.title_edit.move(5, 30)
         
-        self.author_label = QtWidgets.QLabel("Author(s):", self)
+        self.author_label = PyQt5.QtWidgets.QLabel("Author(s):", self)
         self.author_label.move(5, 55)
         
-        self.author_edit = QtWidgets.QLineEdit(self)
+        self.author_edit = PyQt5.QtWidgets.QLineEdit(self)
         self.author_edit.setText("")
         self.author_edit.resize(635, 18)
         self.author_edit.move(5, 85)
         
-        self.code_label = QtWidgets.QLabel("Code:", self)
+        self.code_label = PyQt5.QtWidgets.QLabel("Code:", self)
         self.code_label.move(5, 110)
         
-        self.code_edit = Editor(self)
+        self.code_edit = CodeTextWidget.Editor(self)
         self.code_edit.setPlainText("")
         self.code_edit.resize(350, 200)
         self.code_edit.move(5, 145)
         self.code_edit.textChanged.connect(self.is_code_valid)
         
-        self.comment_label = QtWidgets.QLabel("Comment:", self)
+        self.comment_label = PyQt5.QtWidgets.QLabel("Comment:", self)
         self.comment_label.move(360, 110)
         
-        self.comment_edit = QtWidgets.QTextEdit(self)
+        self.comment_edit = PyQt5.QtWidgets.QTextEdit(self)
         self.comment_edit.setText("")
         self.comment_edit.resize(285, 290)
         self.comment_edit.move(360, 145)
 
-        self.format_button = QtWidgets.QPushButton("Format", self)
+        self.format_button = PyQt5.QtWidgets.QPushButton("Format", self)
         self.format_button.resize(350, 30)
         self.format_button.move(5, 350)
         self.format_button.clicked.connect(self.format_code)
         
-        self.raw_assembly_checkbox = QtWidgets.QCheckBox("RAW Machine Code", self)
+        self.raw_assembly_checkbox = PyQt5.QtWidgets.QCheckBox("RAW Machine Code", self)
         self.raw_assembly_checkbox.setEnabled(False)
         self.raw_assembly_checkbox.resize(160, 30)
         self.raw_assembly_checkbox.move(5, 380)
         
-        self.assembly_ram_write_checkbox = QtWidgets.QCheckBox("Assembly RAM Write", self)
+        self.assembly_ram_write_checkbox = PyQt5.QtWidgets.QCheckBox("Assembly RAM Write", self)
         self.assembly_ram_write_checkbox.setChecked(False)
         self.assembly_ram_write_checkbox.resize(175, 30)
         self.assembly_ram_write_checkbox.move(180, 380)
         
-        self.total_lines_label = QtWidgets.QLabel("Total Lines: 0", self)
+        self.total_lines_label = PyQt5.QtWidgets.QLabel("Total Lines: 0", self)
         self.total_lines_label.resize(175, 40)
         self.total_lines_label.move(5, 400)
         
-        self.code_wizard_button = QtWidgets.QPushButton("Code Wizard", self)
+        self.code_wizard_button = PyQt5.QtWidgets.QPushButton("Code Wizard", self)
         self.code_wizard_button.resize(350, 30)
         self.code_wizard_button.move(5, 435)
         self.code_wizard_button.clicked.connect(self.open_code_wizard)
         
-        self.status_label = QtWidgets.QLabel("Status: OK!", self)
+        self.status_label = PyQt5.QtWidgets.QLabel("Status: OK!", self)
         self.status_label.resize(350, 40)
         self.status_label.move(5, 460)
         
-        self.code_creator_ok_button = QtWidgets.QPushButton("OK", self)
+        self.code_creator_ok_button = PyQt5.QtWidgets.QPushButton("OK", self)
         self.code_creator_ok_button.resize(635, 30)
         self.code_creator_ok_button.move(5, 500)
         self.code_creator_ok_button.clicked.connect(self.save_xml)
         
         qr = self.frameGeometry()
-        cp = QtWidgets.QDesktopWidget().availableGeometry().center()
+        cp = PyQt5.QtWidgets.QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
@@ -191,14 +191,14 @@ class CodeCreator(QtWidgets.QMainWindow):
             end_index = content.find('</entry>', start_index) + len('</entry>')
 
             if end_index == -1:
-                print(f'[QtGecko]: Invalid XML Format!')
+                print(f'{colorama.Fore.MAGENTA}[QtGecko]:{colorama.Fore.RESET} Invalid XML Format!')
             elif start_index == -1:
-                print(f'[QtGecko]: Entry: {entry_name} does not exist. Creating it.')
+                print(f'{colorama.Fore.MAGENTA}[QtGecko]: Entry: {colorama.Fore.YELLOW}\'{entry_name}\' {colorama.Fore.RESET}does not exist. Creating it.')
                 new_content = content.replace('</codes>', appended_entry + '</codes>')
                 with open(self.file_path, 'w') as f:
                     f.write(new_content)
             else:
-                print(f'[QtGecko]: Edited entry: {entry_name}')
+                print(f'{colorama.Fore.MAGENTA}[QtGecko]: {colorama.Fore.RESET}Edited entry: {colorama.Fore.YELLOW}\'{entry_name}\'{colorama.Fore.RESET}')
                 new_content = content[:start_index] + edited_entry + content[end_index:]
                 with open(self.file_path, 'w') as f:
                     f.write(new_content)
@@ -206,6 +206,6 @@ class CodeCreator(QtWidgets.QMainWindow):
         self.close()
         
     def open_code_wizard(self):
-            self.window = ErrorWindow()
+            self.window = ErrorWindow.ErrorWindow()
             self.window.CreateWindow("Welp..", f"This feature doesn't exist yet..", 280, 150)
             self.window.show()

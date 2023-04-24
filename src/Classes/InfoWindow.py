@@ -2,10 +2,9 @@ if __name__ == "__main__":
     print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
     exit()
 else:
-    from PyQt5 import QtCore, QtGui, QtWidgets
-    import base64
+    import base64, PyQt5
 
-class InfoWindow(QtWidgets.QMainWindow):
+class InfoWindow(PyQt5.QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         
@@ -16,33 +15,35 @@ class InfoWindow(QtWidgets.QMainWindow):
     def CreateWindow(self, WindowText, LabelText, x_size, y_size):
         self.setWindowTitle(WindowText)
         self.setFixedSize(x_size, y_size)
-        self.setWindowIcon(QtGui.QIcon("info.png"))
+        self.pixmap = PyQt5.QtGui.QPixmap()
+        self.pixmap.loadFromData(self.decoded_data)
+        self.setWindowIcon(PyQt5.QtGui.QIcon(self.pixmap))
         
         qr = self.frameGeometry()
-        cp = QtWidgets.QDesktopWidget().availableGeometry().center()
+        cp = PyQt5.QtWidgets.QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
     
-        hbox = QtWidgets.QHBoxLayout()
-        vbox = QtWidgets.QVBoxLayout()
-        main_layout = QtWidgets.QVBoxLayout()
+        hbox = PyQt5.QtWidgets.QHBoxLayout()
+        vbox = PyQt5.QtWidgets.QVBoxLayout()
+        main_layout = PyQt5.QtWidgets.QVBoxLayout()
 
-        label = QtWidgets.QLabel(LabelText)
+        label = PyQt5.QtWidgets.QLabel(LabelText)
         label.setOpenExternalLinks(True)
         label.setWordWrap(True)
         
-        filler_label = QtWidgets.QLabel()
+        filler_label = PyQt5.QtWidgets.QLabel()
         filler_label.setFixedWidth(10)
 
-        pixmap = QtGui.QPixmap()
+        pixmap = PyQt5.QtGui.QPixmap()
         pixmap.loadFromData(self.decoded_data)
         pixmap = pixmap.scaled(50, 50)
-        pixmap_label = QtWidgets.QLabel()
+        pixmap_label = PyQt5.QtWidgets.QLabel()
         pixmap_label.setFixedSize(50, 50)
         pixmap_label.setPixmap(pixmap)
-        self.setWindowIcon(QtGui.QIcon(pixmap))
+        self.setWindowIcon(PyQt5.QtGui.QIcon(pixmap))
         
-        button = QtWidgets.QPushButton("OK")
+        button = PyQt5.QtWidgets.QPushButton("OK")
         button.clicked.connect(self.close)
 
         hbox.addWidget(pixmap_label)
@@ -53,7 +54,7 @@ class InfoWindow(QtWidgets.QMainWindow):
         main_layout.addLayout(hbox)
         main_layout.addLayout(vbox)
 
-        main_widget = QtWidgets.QWidget()
+        main_widget = PyQt5.QtWidgets.QWidget()
         main_widget.setLayout(main_layout)
         
         self.setCentralWidget(main_widget)

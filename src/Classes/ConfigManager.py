@@ -2,7 +2,7 @@ if __name__ == "__main__":
     print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
     exit()
 else:
-    import os, configparser
+    import os, configparser, colorama
 
 class ConfigManager:
     SECTION_NAME = 'OPTIONS'
@@ -27,15 +27,15 @@ class ConfigManager:
         self.theme_option = self.config.get(self.SECTION_NAME, self.THEME_OPTION_NAME, fallback="")
 
         if self.connection_timeout_option:
-            print(f"[QtGecko]: Connection Timeout: {self.connection_timeout_option}")
+            print(f"{colorama.Fore.MAGENTA}[QtGecko]:{colorama.Fore.RESET} Connection Timeout: {colorama.Fore.YELLOW}'{self.connection_timeout_option}'{colorama.Fore.RESET}")
         else:
-            print(f"[QtGecko]: Connection Timeout: {self.connection_timeout_option}")
+            print(f"{colorama.Fore.MAGENTA}[QtGecko]:{colorama.Fore.RESET} Connection Timeout: {colorama.Fore.YELLOW}'{self.connection_timeout_option}'{colorama.Fore.RESET}")
 
         if self.last_used_ipv4:
-            print(f"[QtGecko]: Last used IPv4: {self.last_used_ipv4}")
+            print(f"{colorama.Fore.MAGENTA}[QtGecko]:{colorama.Fore.RESET} Last used IPv4: {colorama.Fore.YELLOW}'{self.last_used_ipv4}'{colorama.Fore.RESET}")
             
         if self.theme_option:
-            print(f"[QtGecko]: Current theme: {self.theme_option}")
+            print(f"{colorama.Fore.MAGENTA}[QtGecko]:{colorama.Fore.RESET} Current theme: {colorama.Fore.YELLOW}'{self.theme_option}'{colorama.Fore.RESET}")
 
     def create_config(self):
         config = configparser.ConfigParser()
@@ -63,7 +63,7 @@ class ConfigManager:
                         option_name = "IPv4"
                     else:
                         option_name = option_name
-                    print(f"[QtGecko]: Wrote '{option_value}' to {option_name}")
+                    print(f"{colorama.Fore.MAGENTA}[QtGecko]:{colorama.Fore.RESET} Wrote value: {colorama.Fore.YELLOW}'{option_value}'{colorama.Fore.RESET} to tag: {colorama.Fore.GREEN}'{option_name}'{colorama.Fore.RESET}")
                 else:
                     config_file.write(config_line)
 

@@ -2,8 +2,7 @@ if __name__ == "__main__":
     print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
     exit()
 else:
-    import sys
-    from PyQt5 import QtWidgets
+    import sys, PyQt5
 
 html_content = '''<!DOCTYPE html>
 <html lang="en"><head>
@@ -1203,23 +1202,23 @@ This line of code is required at the end of Time-Dependence codetypes.</p>
 
 </body></html>'''
 
-class HTMLViewer(QtWidgets.QWidget):
+class HTMLViewer(PyQt5.QtWidgets.QWidget):
     def __init__(self, html_content):
         super().__init__()
 
         # create a QTextBrowser widget
-        browser = QtWidgets.QTextBrowser()
+        browser = PyQt5.QtWidgets.QTextBrowser()
         browser.setOpenExternalLinks(True)
 
         # set the text browser content to the loaded HTML
         browser.setHtml(html_content)
         self.center_screen()
         
-        button = QtWidgets.QPushButton("Close Window")
+        button = PyQt5.QtWidgets.QPushButton("Close Window")
         button.clicked.connect(self.close)
 
         # set the main window properties
-        vbox = QtWidgets.QVBoxLayout()
+        vbox = PyQt5.QtWidgets.QVBoxLayout()
         vbox.addWidget(browser)
         vbox.addWidget(button)
         self.setLayout(vbox)
@@ -1228,6 +1227,6 @@ class HTMLViewer(QtWidgets.QWidget):
         
     def center_screen(self):
         frame_geometry = self.frameGeometry()
-        calculate_screen = QtWidgets.QDesktopWidget().availableGeometry().center()
+        calculate_screen = PyQt5.QtWidgets.QDesktopWidget().availableGeometry().center()
         frame_geometry.moveCenter(calculate_screen)
         self.move(frame_geometry.topLeft())

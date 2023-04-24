@@ -2,10 +2,10 @@ if __name__ == "__main__":
     print("This is a module that is imported by 'QtGecko.py'. Don't run it directly.")
     exit()
 else:
-    from PyQt5 import QtWidgets, QtGui, QtCore
-    import sys, re, webbrowser
+    import sys, re, webbrowser, \
+           PyQt5
 
-class ExportGCTUWindow(QtWidgets.QWidget):
+class ExportGCTUWindow(PyQt5.QtWidgets.QWidget):
     def __init__(self, input_string, parent=None):
         super().__init__(parent)
         
@@ -14,22 +14,22 @@ class ExportGCTUWindow(QtWidgets.QWidget):
         self.setFixedSize(600, 100)
         self.center_screen()
         
-        main_layout = QtWidgets.QVBoxLayout(self)
-        row1_layout = QtWidgets.QHBoxLayout()
-        row2_layout = QtWidgets.QHBoxLayout()
+        main_layout = PyQt5.QtWidgets.QVBoxLayout(self)
+        row1_layout = PyQt5.QtWidgets.QHBoxLayout()
+        row2_layout = PyQt5.QtWidgets.QHBoxLayout()
         
-        header_label = QtWidgets.QLabel("Specify the (dashed) Title-ID")
+        header_label = PyQt5.QtWidgets.QLabel("Specify the (dashed) Title-ID")
         main_layout.addWidget(header_label)
         
-        title_id_label = QtWidgets.QLabel("Title ID:")
-        self.title_id_line_edit = QtWidgets.QLineEdit()
+        title_id_label = PyQt5.QtWidgets.QLabel("Title ID:")
+        self.title_id_line_edit = PyQt5.QtWidgets.QLineEdit()
         self.title_id_line_edit.textChanged.connect(self.gctu_update)
         row1_layout.addWidget(title_id_label)
         row1_layout.addWidget(self.title_id_line_edit)
         
-        self.confirm_button = QtWidgets.QPushButton("Confirm")
+        self.confirm_button = PyQt5.QtWidgets.QPushButton("Confirm")
         self.confirm_button.clicked.connect(self.on_confirm)
-        self.title_database = QtWidgets.QPushButton("Wii U Title Database")
+        self.title_database = PyQt5.QtWidgets.QPushButton("Wii U Title Database")
         self.title_database.clicked.connect(self.open_title_database)
         row2_layout.addWidget(self.confirm_button)
         row2_layout.addWidget(self.title_database)
@@ -40,7 +40,7 @@ class ExportGCTUWindow(QtWidgets.QWidget):
         
     def center_screen(self):
         frame_geometry = self.frameGeometry()
-        calculate_screen = QtWidgets.QDesktopWidget().availableGeometry().center()
+        calculate_screen = PyQt5.QtWidgets.QDesktopWidget().availableGeometry().center()
         frame_geometry.moveCenter(calculate_screen)
         self.move(frame_geometry.topLeft())
         
@@ -51,7 +51,7 @@ class ExportGCTUWindow(QtWidgets.QWidget):
             match = pattern.search(address)
             return match is not None
     
-        # Set QtWidgets.QLineEdit style based on IPv4 Validity
+        # Set PyQt5.QtWidgets.QLineEdit style based on IPv4 Validity
         if is_valid_hex_address(self.title_id_line_edit.text()):
             self.title_id_line_edit.setStyleSheet("background-color: #00FF00;")
             self.confirm_button.setEnabled(True)
