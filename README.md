@@ -9,6 +9,7 @@ This project is by no means finished, and is a _MAJOR_ work in progress.
 ## Requirements
 - [PyQt5](https://pypi.org/project/PyQt5/)
 - [configparser](https://pypi.org/project/configparser/)  
+- [colorama](https://pypi.org/project/colorama/)
 
 All other dependencies should already be installed with the base Python package, but I'll list them anyway just in case they aren't.
 - [re](https://docs.python.org/3/library/re.html)
