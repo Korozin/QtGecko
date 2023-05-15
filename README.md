@@ -1,3 +1,10 @@
+# NOTE!
+
+Until further notice - Development on this project is on hold for one reason: I can't test anything I make besides local features. It's an absolute pain to try and make the socket functions for code sending, when I can't even test if they work or not, and at the same time? No one really offers to test the program. I would _LIKE_ to make sure all aspects of the program work before adding more, because that's just how I prefer to develop, as to avoid major bugs in the later parts of the life-cycle.
+
+Anyways, with that out of the way- Here's the rest of the README file.
+
+---
 # QtGecko
 
 QtGecko aims to be an open-sourced implementation of [JGecko U](github.com/bullywiiplaza/JGeckoU/) in Python using the Qt5 Framework.  
