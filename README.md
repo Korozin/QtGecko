@@ -1,8 +1,10 @@
 # NOTE!
 
-Until further notice - Development on this project is on hold for one reason: I can't test anything I make besides local features. It's an absolute pain to try and make the socket functions for code sending, when I can't even test if they work or not, and at the same time? No one really offers to test the program. I would _LIKE_ to make sure all aspects of the program work before adding more, because that's just how I prefer to develop, as to avoid major bugs in the later parts of the life-cycle.
+Unfortunately, development on this project is temporarily halted due to limited testing capabilities beyond local features (such as parsing the code-list, making GCTUs, etc). Implementing socket functions for code sending is proving to be difficult without proper testing, and there is a lack of available testers for the program; and seeing as I'm unable to test the porgram myself, this is a major problem. Thorough testing is necessary to ensure a stable end-product and prevent major bugs from arising later when I could have attempted to fix them early on. 
 
-Anyways, with that out of the way- Here's the rest of the README file.
+I apologize for any inconvenience this may cause (if any) and will attempt to provide updates if / when testing capabilities improve. 
+
+With that out of the way, you can continue to read the rest of the README file for any further information.
 
 ---
 # QtGecko
